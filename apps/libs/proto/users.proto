@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package users;
+
+service UserService {
+  rpc GetUserByBarcode (GetUserByBarcodeRequest) returns (UserResponse);
+  rpc SaveUser (CreateUserRequest) returns (Response);
+  rpc DeleteUser (DeleteUserRequest) returns (Response);
+}
+
+// requests 
+
+message GetUserByBarcodeRequest {
+  string barcode = 1;
+}
+
+message CreateUserRequest {
+  User user = 1;
+}
+
+message DeleteUserRequest {
+  string barcode = 1;
+}
+
+// entities
+
+message Role {
+    optional int32 id = 1;
+    string key = 2;
+    string name = 3;
+}
+
+message Group {
+    optional int32 id = 1;
+    string name = 2;
+}
+
+message User {
+  int32 id = 1;
+  string barcode = 2;
+  string name = 3;
+  string surname = 4;
+  optional Role role = 5;
+  optional Group group = 6;
+  optional string imageId = 7;
+  int32 scores = 8;
+}
+
+// Response
+
+message UserResponse {
+  int32 statusCode = 1;
+  User data = 2;
+}
+
+message Response {
+  int32 statusCode = 1;
+}
