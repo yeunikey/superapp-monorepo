@@ -11,7 +11,7 @@ import { UserService } from "./user.service";
 @Controller()
 export class UserGrpcController {
 
-    private readonly SECRET_KEY = 'ZvMh[Z7p@fRWF+4,]Qng!TQkV^@{v&Xf=@^|U;U+Hs=6EZ2ZKF';
+    private readonly SECRET_KEY = process.env.GRPC_TOKEN;
 
     constructor(
         private readonly userService: UserService

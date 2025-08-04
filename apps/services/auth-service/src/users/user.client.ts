@@ -29,7 +29,7 @@ export class UserClient implements OnModuleInit {
 
     getMetadata() {
         const metadata = new Metadata();
-        metadata.add('token', 'ZvMh[Z7p@fRWF+4,]Qng!TQkV^@{v&Xf=@^|U;U+Hs=6EZ2ZKF');
+        metadata.add('token', process.env.GRPC_TOKEN ?? '');
         return metadata;
     }
 

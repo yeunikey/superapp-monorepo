@@ -1,20 +1,19 @@
 import './global.css';
 
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar } from 'react-native';
-import { RootStackParamList } from '~/shared/types/root';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
-
+import AuthPage from '~/app/auth/page';
+import AuthorsTab from '~/app/tabs/authors/tab';
 import LoaderPage from '~/app/loader/page';
 import MainPage from '~/app/page';
-import ProfilePage from '~/app/profile/page';
-import AuthorsTab from '~/app/tabs/authors/tab';
-import PolicyTab from '~/app/tabs/policy/tab';
-import SettingsTab from '~/app/tabs/settings/tab';
-import NotificationsTab from '~/app/tabs/notifications/tab';
 import MapService from '~/app/services/map/service';
-import AuthPage from '~/app/auth/page';
+import { NavigationContainer } from '@react-navigation/native';
+import NotificationsTab from '~/app/tabs/notifications/tab';
+import PolicyTab from '~/app/tabs/policy/tab';
+import ProfilePage from '~/app/profile/page';
+import { RootStackParamList } from '~/shared/types/root';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import SettingsTab from '~/app/tabs/settings/tab';
+import { StatusBar } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

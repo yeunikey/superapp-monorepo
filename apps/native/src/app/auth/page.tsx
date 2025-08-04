@@ -1,14 +1,20 @@
-import SafeView from "~/shared/ui/SafeView";
-import { Text, Image, View, Dimensions, TextInput, ScrollView } from "react-native";
+import * as SecureStore from 'expo-secure-store';
+
+import { Alert, Dimensions, Image, ScrollView, Text, TextInput, View } from "react-native";
+import { useRef, useState } from "react";
+
 import { APP_VERSION } from "~/shared/config/constants";
+import { ApiResponse } from '~/types';
 import Button from "~/shared/ui/Button";
-import { useState, useRef } from "react";
+import SafeView from "~/shared/ui/SafeView";
+import { api } from '~/shared/api/instance';
 
 function AuthPage() {
     const { width } = Dimensions.get('window');
     const [type, setType] = useState<'login' | 'code'>('login');
     const [barcode, setBarcode] = useState('');
     const [code, setCode] = useState(['', '', '', '']);
+    const [loading, setLoading] = useState(false);
 
     const inputRefs = [
         useRef<TextInput>(null),
@@ -30,6 +36,55 @@ function AuthPage() {
             if (!value && index > 0) {
                 inputRefs[index - 1].current?.focus();
             }
+        }
+    };
+
+    const handleAuth = async () => {
+        if (loading) return;
+        setLoading(true);
+
+        try {
+            if (type === 'login') {
+                if (!barcode) {
+                    Alert.alert("Ошибка", "Введите баркод");
+                    return;
+                }
+
+                const res = await api.post<ApiResponse<{}>>('/code', { barcode });
+                console.log(res)
+
+                if (res.data.statusCode === 400) {
+                    Alert.alert("Ошибка", res.data.message);
+                } else {
+                    setType('code');
+                    Alert.alert("Код отправлен", "Проверьте почту Outlook");
+                }
+
+            } else {
+                const enteredCode = code.join('');
+
+                const res = await api.post('/confirm', {
+                    barcode,
+                    code: enteredCode,
+                });
+
+                if (res.data.statusCode === 400) {
+                    Alert.alert("Ошибка", res.data.message);
+                } else {
+                    const token: string = res.data.data.token;
+                    const student = res.data.data.user;
+
+                    await SecureStore.setItemAsync('token', token);
+
+                    Alert.alert("Успешный вход", `Добро пожаловать, ${student.name}`);
+                    // TODO: перейти на главный экран
+                }
+            }
+        } catch (err: any) {
+            console.error(err);
+            Alert.alert("Ошибка", err?.response?.data?.message ?? 'Что-то пошло не так');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -62,6 +117,7 @@ function AuthPage() {
                             onChangeText={setBarcode}
                             placeholder="Введите баркод"
                             placeholderTextColor="#C3C3C3"
+                            keyboardType="number-pad"
                             className="w-full px-6 py-5 text-xl bg-background rounded-2xl text-black"
                         />
                     ) : (
@@ -82,11 +138,8 @@ function AuthPage() {
                 </View>
 
                 <Button
-                    label={type === 'login' ? 'Продолжить' : 'Подтвердить'}
-                    onPress={() => {
-                        if (type === 'login') setType('code');
-                        else console.log('Code submitted:', code.join(''));
-                    }}
+                    label={loading ? 'Загрузка...' : type === 'login' ? 'Продолжить' : 'Подтвердить'}
+                    onPress={handleAuth}
                 />
             </ScrollView>
 

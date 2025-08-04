@@ -1,19 +1,33 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect } from "react";
-import { Image, View, Text } from "react-native";
-import { useLoaderAnimation } from "~/features/loader/model/useLoaderAnimation";
-import LoaderProgress from "~/features/loader/ui/LoaderProgress";
+import * as SecureStore from 'expo-secure-store';
+
+import { Image, Text, View } from "react-native";
+
 import { APP_VERSION } from "~/shared/config/constants";
-import { preloadAssets } from "~/shared/module/images";
+import LoaderProgress from "~/features/loader/ui/LoaderProgress";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "~/shared/types/root";
+import { preloadAssets } from "~/shared/module/images";
+import { useAuth } from '~/entities/student/model/useAuth';
+import { useEffect } from "react";
+import { useLoaderAnimation } from "~/features/loader/model/useLoaderAnimation";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Loader'>;
 
 function LoaderPage({ navigation }: Props) {
     const { animatedWidth } = useLoaderAnimation(navigation);
+    const { setAuth, setLoading } = useAuth();
+
+    const checkAuth = async () => {
+        const token = await SecureStore.getItemAsync('token');
+
+        setAuth(!token ? false : true);
+        console.log(!token ? false : true)
+        setLoading(false);
+    }
 
     useEffect(() => {
         preloadAssets();
+        checkAuth();
     }, [])
 
     return (

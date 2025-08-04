@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import { Student } from '../types/student';
+import { create } from 'zustand';
 
 type AuthState = {
     isAuth: boolean;
@@ -17,13 +17,13 @@ type AuthState = {
 
 export const useAuth = create<AuthState>((set) => ({
 
-    isAuth: true,
+    isAuth: false,
     setAuth: (isAuth) => set({ isAuth }),
 
-    isLoading: false,
+    isLoading: true,
     setLoading: (isLoading) => set({ isLoading }),
 
-    token: 'test',
+    token: '',
     setToken: (token) => set({ token }),
 
     loggedStudent: {

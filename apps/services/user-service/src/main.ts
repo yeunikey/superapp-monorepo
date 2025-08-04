@@ -1,10 +1,13 @@
+import { join, resolve } from 'path';
+
 import { AppModule } from './app.module';
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
-import { join } from 'path';
+import dotenv from 'dotenv';
 
 async function bootstrap() {
+  dotenv.config({ path: resolve(__dirname, './../../../../.env') });
   const app = await NestFactory.create(AppModule);
 
   app.connectMicroservice({
@@ -12,7 +15,7 @@ async function bootstrap() {
     options: {
       package: ['users'],
       protoPath: [join(__dirname, './../../../libs/proto/users.proto')],
-      url: `0.0.0.0:${process.env.PORT ?? 5001}`,
+      url: `0.0.0.0:${process.env.USER_SERVICE__GRPC_PORT ?? 5001}`,
     },
   });
 
@@ -25,6 +28,6 @@ async function bootstrap() {
   );
 
   await app.startAllMicroservices(); // старт gRPC
-  await app.listen(process.env.HTTP_PORT ?? 4001); // старт HTTP
+  await app.listen(process.env.USER_SERVICE_PORT ?? 4001); // старт HTTP
 }
 bootstrap();
