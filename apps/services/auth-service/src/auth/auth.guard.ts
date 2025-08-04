@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
- 
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
                 }
             );
 
-            request['student'] = payload;
+            request['user'] = payload;
 
         } catch {
             throw new UnauthorizedException();

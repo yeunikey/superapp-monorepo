@@ -40,16 +40,39 @@ export class UserController {
     async saveUser(@Body() user: CreateUserDto, @Req() { user: { barcode } }: AuthRequest) {
 
         const requestUser = await this.userService.find(barcode);
+        const isAdmin = requestUser?.role?.key === 'admin';
 
-        if (!requestUser || !requestUser.role || requestUser.role.key != 'admin') {
+        if (!requestUser) {
             return {
                 statusCode: HttpStatus.UNAUTHORIZED,
-                message: "У вас нет прав"
+                message: "Вы не авторизованы"
+            };
+        }
+
+        if (!isAdmin) {
+            if (user.barcode !== requestUser.barcode) {
+                return {
+                    statusCode: HttpStatus.FORBIDDEN,
+                    message: "Вы можете редактировать только свой профиль"
+                };
             }
+
+            const existingUser = await this.userService.find(user.barcode);
+            if (!existingUser) {
+                return {
+                    statusCode: HttpStatus.NOT_FOUND,
+                    message: "Пользователь не найден"
+                };
+            }
+
+            existingUser.imageId = user.imageId;
+
+            return this.userService.save(existingUser);
         }
 
         return this.userService.save(user);
     }
+
 
     @Delete(':barcode')
     async deleteUser(@Param('barcode') barcode: string) {

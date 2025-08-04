@@ -1,11 +1,13 @@
 import xior from 'xior';
 
 export const defaultOptions: Record<string, string> = {
-    'Content-Type': 'application/json'
-}
+    'Content-Type': 'application/json; charset=utf-8',
+    'Accept': 'application/json'
+};
+
 
 // export const baseUrl = 'http://172.20.10.3:3001/v1'
-export const baseUrl = 'http://192.168.10.4:4002'
+export const baseUrl = 'http://192.168.88.156:4002'
 // export const baseUrl = 'https://panel-api.flood.astanait.edu.kz/v1'
 
 export const api = xior.create({
@@ -14,5 +16,5 @@ export const api = xior.create({
 });
 
 export const vapi = xior.create({
-    baseURL: baseUrl
+    baseURL: 'http://192.168.88.156:4003'
 });

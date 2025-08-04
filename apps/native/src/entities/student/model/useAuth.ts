@@ -1,5 +1,5 @@
-import { Student } from '../types/student';
 import { create } from 'zustand';
+import { User } from '../types/user';
 
 type AuthState = {
     isAuth: boolean;
@@ -11,8 +11,8 @@ type AuthState = {
     token: string;
     setToken: (token: string) => void;
 
-    loggedStudent: Student | null
-    setLoggedStudent: (student: Student | null) => void;
+    loggedUser: User | null
+    setLoggedUser: (student: User | null) => void;
 };
 
 export const useAuth = create<AuthState>((set) => ({
@@ -26,22 +26,7 @@ export const useAuth = create<AuthState>((set) => ({
     token: '',
     setToken: (token) => set({ token }),
 
-    loggedStudent: {
-        id: 1,
-        barcode: '242277',
-        name: 'Ерасыл',
-        surname: 'Унербек',
-        group: {
-            id: 1,
-            name: 'SE-2402'
-        },
-        image: '@assets/avatar.jpg',
-        score: 24,
-        role: {
-            key: 'dev',
-            name: 'Разработчик'
-        }
-    },
-    setLoggedStudent: (student) => set({ loggedStudent: student }),
+    loggedUser: null,
+    setLoggedUser: (user) => set({ loggedUser: user }),
 
 }));

@@ -8,13 +8,17 @@ import { ApiResponse } from '~/types';
 import Button from "~/shared/ui/Button";
 import SafeView from "~/shared/ui/SafeView";
 import { api } from '~/shared/api/instance';
+import { useNavigationTabs } from '~/shared/lib/useNavigationTabs';
+import { useAuth } from '~/entities/student/model/useAuth';
+import { User } from '~/entities/student/types/user';
 
 function AuthPage() {
     const { width } = Dimensions.get('window');
     const [type, setType] = useState<'login' | 'code'>('login');
     const [barcode, setBarcode] = useState('');
     const [code, setCode] = useState(['', '', '', '']);
-    const [loading, setLoading] = useState(false);
+    const navigation = useNavigationTabs();
+    const { setLoggedUser, setAuth, setLoading, isLoading, setToken } = useAuth();
 
     const inputRefs = [
         useRef<TextInput>(null),
@@ -40,7 +44,7 @@ function AuthPage() {
     };
 
     const handleAuth = async () => {
-        if (loading) return;
+        if (isLoading) return;
         setLoading(true);
 
         try {
@@ -50,20 +54,17 @@ function AuthPage() {
                     return;
                 }
 
-                const res = await api.post<ApiResponse<{}>>('/code', { barcode });
-                console.log(res)
+                const res = await api.post<ApiResponse<unknown>>('/code', { barcode });
+                setType('code');
 
-                if (res.data.statusCode === 400) {
+                if (res.data.statusCode !== 200) {
                     Alert.alert("Ошибка", res.data.message);
-                } else {
-                    setType('code');
-                    Alert.alert("Код отправлен", "Проверьте почту Outlook");
                 }
 
             } else {
                 const enteredCode = code.join('');
 
-                const res = await api.post('/confirm', {
+                const res = await api.post<ApiResponse<{ token: string, user: User }>>('/confirm', {
                     barcode,
                     code: enteredCode,
                 });
@@ -72,12 +73,18 @@ function AuthPage() {
                     Alert.alert("Ошибка", res.data.message);
                 } else {
                     const token: string = res.data.data.token;
-                    const student = res.data.data.user;
+                    const user: User = res.data.data.user;
+
+                    setAuth(true);
+                    setLoggedUser(user);
+                    setToken(token);
 
                     await SecureStore.setItemAsync('token', token);
 
-                    Alert.alert("Успешный вход", `Добро пожаловать, ${student.name}`);
-                    // TODO: перейти на главный экран
+
+                    navigation.navigate('Main', {
+                        animation: 'slide_from_right'
+                    })
                 }
             }
         } catch (err: any) {
@@ -138,7 +145,7 @@ function AuthPage() {
                 </View>
 
                 <Button
-                    label={loading ? 'Загрузка...' : type === 'login' ? 'Продолжить' : 'Подтвердить'}
+                    label={isLoading ? 'Загрузка...' : type === 'login' ? 'Продолжить' : 'Подтвердить'}
                     onPress={handleAuth}
                 />
             </ScrollView>

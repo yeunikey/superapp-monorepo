@@ -21,9 +21,7 @@ export class AuthController {
 
         return {
             statusCode: 200,
-            data: {
-                user,
-            }
+            data: user
         };
     }
 

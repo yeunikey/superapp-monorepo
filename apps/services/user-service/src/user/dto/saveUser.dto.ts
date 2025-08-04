@@ -1,54 +1,70 @@
-import { IsNotEmpty, IsOptional, IsString, ValidateNested } from "@nestjs/class-validator";
-
-import { Type } from "@nestjs/class-transformer";
+import { Expose, Type } from "class-transformer";
+import { IsOptional, IsString, ValidateNested, IsNumber } from "class-validator";
 
 class RoleDto {
-    @IsString()
-    @IsNotEmpty()
-    id: number;
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  id?: number;
 
-    @IsString()
-    key: string;
+  @Expose()
+  @IsOptional()
+  @IsString()
+  key?: string;
 
-    @IsString()
-    name: string;
+  @Expose()
+  @IsOptional()
+  @IsString()
+  name?: string;
 }
 
 class GroupDto {
-    @IsString()
-    @IsNotEmpty()
-    id: number;
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  id?: number;
 
-    @IsString()
-    name: string;
+  @Expose()
+  @IsOptional()
+  @IsString()
+  name?: string;
 }
 
 export class CreateUserDto {
-    @IsString()
-    @IsNotEmpty()
-    barcode: string;
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  id?: number;
 
-    @IsString()
-    @IsNotEmpty()
-    name: string;
+  @Expose()
+  @IsString()
+  barcode: string;
 
-    @IsString()
-    @IsNotEmpty()
-    surname: string;
+  @Expose()
+  @IsString()
+  name: string;
 
-    @IsOptional()
-    imageId?: string;
+  @Expose()
+  @IsString()
+  surname: string;
 
-    @IsOptional()
-    scores?: number;
+  @Expose()
+  @IsOptional()
+  imageId?: string;
 
-    @ValidateNested()
-    @Type(() => RoleDto)
-    @IsOptional()
-    role?: RoleDto;
+  @Expose()
+  @IsOptional()
+  scores?: number;
 
-    @ValidateNested()
-    @Type(() => GroupDto)
-    @IsOptional()
-    group?: GroupDto;
+  @Expose()
+  @ValidateNested()
+  @Type(() => RoleDto)
+  @IsOptional()
+  role?: RoleDto;
+
+  @Expose()
+  @ValidateNested()
+  @Type(() => GroupDto)
+  @IsOptional()
+  group?: GroupDto;
 }

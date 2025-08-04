@@ -15,7 +15,7 @@ async function bootstrap() {
     options: {
       package: ['users'],
       protoPath: [join(__dirname, './../../../libs/proto/users.proto')],
-      url: `0.0.0.0:${process.env.USER_SERVICE__GRPC_PORT ?? 5001}`,
+      url: `0.0.0.0:${process.env.USER_SERVICE_GRPC_PORT ?? 5001}`,
     },
   });
 
