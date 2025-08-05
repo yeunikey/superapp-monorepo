@@ -38,10 +38,10 @@ export class UserClient implements OnModuleInit {
     }
 
     saveUser(user: User) {
-        return firstValueFrom(this.userService.SaveUser({ user }));
+        return firstValueFrom(this.userService.SaveUser({ user }, this.getMetadata()));
     }
 
     deleteUser(barcode: string) {
-        return firstValueFrom(this.userService.DeleteUser({ barcode }));
+        return firstValueFrom(this.userService.DeleteUser({ barcode }, this.getMetadata()));
     }
 }

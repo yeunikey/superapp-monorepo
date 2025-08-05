@@ -1,6 +1,7 @@
 import { Image, Text, View } from "react-native";
 import { User } from "~/entities/student/types/user";
 import { cn } from "../module/merge";
+import { host } from "../api/instance";
 
 type AvatarProps = {
     user: User;
@@ -14,7 +15,7 @@ function Avatar({ user, className, textContainer }: AvatarProps) {
     if (hasImage) {
         return (
             <Image
-                source={{ uri: `http://192.168.88.156:4003/images/${user.imageId}` }}
+                source={{ uri: `${host}:4003/images/${user.imageId}` }}
                 className={cn('w-12 h-12 rounded-full', className)}
             />
         );

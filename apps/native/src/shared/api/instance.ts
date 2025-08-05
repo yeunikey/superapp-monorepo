@@ -7,7 +7,8 @@ export const defaultOptions: Record<string, string> = {
 
 
 // export const baseUrl = 'http://172.20.10.3:3001/v1'
-export const baseUrl = 'http://192.168.88.156:4002'
+export const host = `http://${process.env.HOST}`;
+export const baseUrl = `${host}:4002`
 // export const baseUrl = 'https://panel-api.flood.astanait.edu.kz/v1'
 
 export const api = xior.create({

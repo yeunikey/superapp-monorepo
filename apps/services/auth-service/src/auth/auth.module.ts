@@ -4,7 +4,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { MailModule } from 'src/mailer/mail.module';
 import { Module } from '@nestjs/common';
 import { UserClient } from 'src/users/user.client';
-import { jwtConstants } from './constants';
 
 @Module({
   controllers: [AuthController],
@@ -16,7 +15,7 @@ import { jwtConstants } from './constants';
     MailModule,
     JwtModule.register({
       global: true,
-      secret: jwtConstants.secret,
+      secret: process.env.JWT_SECRET ?? 'test',
       signOptions: { expiresIn: '7d' },
     }),
   ]

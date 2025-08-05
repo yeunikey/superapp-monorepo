@@ -1,12 +1,12 @@
 import { Controller, HttpStatus } from "@nestjs/common";
 
-import { BarcodeGrpcDto } from "./dto/barcode.grpc.dto";
+import { BarcodeGrpcDto } from "../dto/barcode.grpc.dto";
 import { DeepPartial } from "typeorm";
 import { GrpcMethod } from "@nestjs/microservices";
 import { Metadata } from "@grpc/grpc-js";
-import { SaveUserGrpcDto } from "./dto/saveUser.grpc.dto";
-import { User } from "./entities/user.entity";
-import { UserService } from "./user.service";
+import { SaveUserGrpcDto } from "../dto/saveUser.grpc.dto";
+import { User } from "../entities/user.entity";
+import { UserService } from "../user.service";
 
 @Controller()
 export class UserGrpcController {

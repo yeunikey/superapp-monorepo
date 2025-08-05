@@ -1,99 +1,22 @@
-import * as SecureStore from 'expo-secure-store';
-
-import { Alert, Dimensions, Image, ScrollView, Text, TextInput, View } from "react-native";
-import { useRef, useState } from "react";
+import { ScrollView, Text, View, Image, Dimensions, TextInput } from "react-native";
 
 import { APP_VERSION } from "~/shared/config/constants";
-import { ApiResponse } from '~/types';
-import Button from "~/shared/ui/Button";
 import SafeView from "~/shared/ui/SafeView";
-import { api } from '~/shared/api/instance';
-import { useNavigationTabs } from '~/shared/lib/useNavigationTabs';
-import { useAuth } from '~/entities/student/model/useAuth';
-import { User } from '~/entities/student/types/user';
+import Button from "~/shared/ui/Button";
+import { useAuthForm } from "~/features/auth/ui/useAuthForm";
 
 function AuthPage() {
     const { width } = Dimensions.get('window');
-    const [type, setType] = useState<'login' | 'code'>('login');
-    const [barcode, setBarcode] = useState('');
-    const [code, setCode] = useState(['', '', '', '']);
-    const navigation = useNavigationTabs();
-    const { setLoggedUser, setAuth, setLoading, isLoading, setToken } = useAuth();
-
-    const inputRefs = [
-        useRef<TextInput>(null),
-        useRef<TextInput>(null),
-        useRef<TextInput>(null),
-        useRef<TextInput>(null),
-    ];
-
-    const handleCodeChange = (value: string, index: number) => {
-        if (/^\d?$/.test(value)) {
-            const updated = [...code];
-            updated[index] = value;
-            setCode(updated);
-
-            if (value && index < 3) {
-                inputRefs[index + 1].current?.focus();
-            }
-
-            if (!value && index > 0) {
-                inputRefs[index - 1].current?.focus();
-            }
-        }
-    };
-
-    const handleAuth = async () => {
-        if (isLoading) return;
-        setLoading(true);
-
-        try {
-            if (type === 'login') {
-                if (!barcode) {
-                    Alert.alert("Ошибка", "Введите баркод");
-                    return;
-                }
-
-                const res = await api.post<ApiResponse<unknown>>('/code', { barcode });
-                setType('code');
-
-                if (res.data.statusCode !== 200) {
-                    Alert.alert("Ошибка", res.data.message);
-                }
-
-            } else {
-                const enteredCode = code.join('');
-
-                const res = await api.post<ApiResponse<{ token: string, user: User }>>('/confirm', {
-                    barcode,
-                    code: enteredCode,
-                });
-
-                if (res.data.statusCode === 400) {
-                    Alert.alert("Ошибка", res.data.message);
-                } else {
-                    const token: string = res.data.data.token;
-                    const user: User = res.data.data.user;
-
-                    setAuth(true);
-                    setLoggedUser(user);
-                    setToken(token);
-
-                    await SecureStore.setItemAsync('token', token);
-
-
-                    navigation.navigate('Main', {
-                        animation: 'slide_from_right'
-                    })
-                }
-            }
-        } catch (err: any) {
-            console.error(err);
-            Alert.alert("Ошибка", err?.response?.data?.message ?? 'Что-то пошло не так');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const {
+        type,
+        barcode,
+        code,
+        isLoading,
+        inputRefs,
+        handleCodeChange,
+        setBarcode,
+        handleAuth
+    } = useAuthForm();
 
     return (
         <SafeView className="flex-1 bg-white relative">
@@ -158,3 +81,5 @@ function AuthPage() {
 }
 
 export default AuthPage;
+
+

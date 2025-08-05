@@ -41,7 +41,7 @@ export class AuthService {
 
         const timeout = setTimeout(() => {
             this.codeMap.delete(user.barcode);
-        }, 3 * 60 * 1000); // 3 минуты
+        }, 3 * 60 * 1000);
 
         this.codeMap.set(user.barcode, { code, timeout });
 

@@ -8,7 +8,6 @@ import { RoleModule } from './roles/role.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
-import { jwtConstants } from './guard/constants';
 
 @Module({
   imports: [
@@ -30,7 +29,7 @@ import { jwtConstants } from './guard/constants';
 
     JwtModule.register({
       global: true,
-      secret: jwtConstants.secret,
+      secret: process.env.JWT_SECRET ?? 'test',
       signOptions: { expiresIn: '7d' },
     }),
 

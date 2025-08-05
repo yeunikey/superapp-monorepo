@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package images;
+
+service ImageService {
+  rpc DeleteImage (DeleteImageRequest) returns (Response);
+}
+
+// requests 
+
+message DeleteImageRequest {
+  string id = 1;
+}
+
+// Response
+
+message Response {
+  int32 statusCode = 1;
+}

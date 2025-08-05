@@ -9,7 +9,7 @@ export class ImageController {
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
     async upload(@UploadedFile() file: Express.Multer.File) {
-        
+
         if (!file) throw new BadRequestException('Файл не передан');
 
         return {

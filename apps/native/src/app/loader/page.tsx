@@ -12,7 +12,7 @@ import { useLoaderAnimation } from "~/features/loader/model/useLoaderAnimation";
 type Props = NativeStackScreenProps<RootStackParamList, 'Loader'>;
 
 function LoaderPage({ navigation }: Props) {
-    const { animatedWidth } = useLoaderAnimation(navigation);
+    const { animatedWidth } = useLoaderAnimation({ navigation: navigation });
 
     useEffect(() => {
         preloadAssets();

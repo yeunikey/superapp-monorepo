@@ -13,13 +13,15 @@ import { UserService } from './user.service';
 import { AuthRequest } from 'src/types';
 import { CreateUserDto } from './dto/saveUser.dto';
 import { AuthGuard } from 'src/guard/auth.guard';
+import { ImageClient } from 'src/images/image.client';
 
 @Controller('users')
 @UseGuards(AuthGuard)
 export class UserController {
 
     constructor(
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly imageClient: ImageClient,
     ) { }
 
     @Get(':barcode')
@@ -38,9 +40,8 @@ export class UserController {
 
     @Post()
     async saveUser(@Body() user: CreateUserDto, @Req() { user: { barcode } }: AuthRequest) {
-
         const requestUser = await this.userService.find(barcode);
-        const isAdmin = requestUser?.role?.key === 'admin';
+        const isAdmin = requestUser?.role?.key === 'admin' || requestUser?.role?.key === 'dev';
 
         if (!requestUser) {
             return {
@@ -58,6 +59,7 @@ export class UserController {
             }
 
             const existingUser = await this.userService.find(user.barcode);
+
             if (!existingUser) {
                 return {
                     statusCode: HttpStatus.NOT_FOUND,
@@ -65,14 +67,23 @@ export class UserController {
                 };
             }
 
+            if (existingUser.imageId && existingUser.imageId !== user.imageId) {
+                await this.imageClient.deleteImage(existingUser.imageId);
+            }
+
             existingUser.imageId = user.imageId;
 
             return this.userService.save(existingUser);
         }
 
+        const targetUser = await this.userService.find(user.barcode);
+
+        if (targetUser && targetUser.imageId && targetUser.imageId !== user.imageId) {
+            await this.imageClient.deleteImage(targetUser.imageId);
+        }
+
         return this.userService.save(user);
     }
-
 
     @Delete(':barcode')
     async deleteUser(@Param('barcode') barcode: string) {
