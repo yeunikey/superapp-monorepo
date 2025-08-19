@@ -1,8 +1,9 @@
+import { join, resolve } from 'path';
+
 import { AppModule } from './app.module';
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import dotenv from 'dotenv';
-import { join, resolve } from 'path';
 
 async function bootstrap() {
   dotenv.config({ path: resolve(__dirname, './../../../../.env') });

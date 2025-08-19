@@ -1,9 +1,10 @@
-import { useNavigation } from "@react-navigation/native";
+import { Text, View } from "react-native";
+
 import { ReactNode } from "react";
-import { View, Text } from "react-native";
-import { SvgXml } from "react-native-svg";
 import SafeView from "./SafeView";
+import { SvgXml } from "react-native-svg";
 import { cn } from "../module/merge";
+import { useNavigation } from "@react-navigation/native";
 
 type TabProps = {
     children?: ReactNode;
@@ -25,7 +26,7 @@ function Tab({ children, title, className }: TabProps) {
                     </View>
                 </View>
 
-                <View className={cn("flex-1 ", className)}>
+                <View className={cn("flex-1", className)}>
                     {children}
                 </View>
             </View>

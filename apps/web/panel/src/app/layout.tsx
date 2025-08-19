@@ -1,6 +1,10 @@
-import type { Metadata } from "next";
-import { Golos_Text } from "next/font/google";
 import "./globals.css";
+
+import Authorize from "@/features/auth/ui/Authorize";
+import { Golos_Text } from "next/font/google";
+import Header from "@/widgets/header/ui/Header";
+import type { Metadata } from "next";
+import { ToastContainer } from "react-toastify";
 
 const golos = Golos_Text({
   variable: "--font-golos",
@@ -20,9 +24,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${golos.variable} antialiased bg-background`}
+        className={`${golos.variable} antialiased bg-background h-dvh`}
       >
-        {children}
+
+        <ToastContainer closeButton hideProgressBar position="bottom-right" stacked autoClose={3000} />
+
+        <Authorize>
+          <div className="flex flex-col h-full">
+            <Header />
+
+            {children}
+          </div>
+        </Authorize>
+
       </body>
     </html>
   );

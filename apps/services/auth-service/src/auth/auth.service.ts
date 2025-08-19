@@ -81,10 +81,12 @@ export class AuthService {
 
         const payload = {
             id: user.id,
-            barcode: user.barcode,
             name: user.name,
             surname: user.surname,
-            imageId: user.imageId,
+            role: user.role?.key ?? undefined,
+            group: user.group?.name ?? undefined,
+            imageId: user.imageId ?? undefined,
+            scores: user.scores
         };
 
         return {

@@ -16,7 +16,7 @@ export class AuthController {
     @UseGuards(AuthGuard)
     @Get('profile')
     async profile(@Request() req: AuthRequest) {
-
+        
         const { data: user } = await this.userClient.getUserByBarcode(req.user.barcode);
 
         return {

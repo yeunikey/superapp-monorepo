@@ -15,7 +15,7 @@ import { UserClient } from 'src/users/user.client';
     MailModule,
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET ?? 'test',
+      secret: 'ZvMh[Z7p@fRWF+4,]Qng!TQkV^@{v&Xf=@^|U;U+Hs=6EZ2ZKF',
       signOptions: { expiresIn: '7d' },
     }),
   ]

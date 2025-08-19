@@ -1,10 +1,15 @@
-import { WebView } from "react-native-webview";
+import { useRef, useState } from "react";
+
+import { Animated } from "react-native";
+import Loading from "~/shared/ui/Loading";
 import Tab from "~/shared/ui/Tab";
-import { useRef } from "react";
+import { WebView } from "react-native-webview";
 import type { WebView as WebViewType } from "react-native-webview";
 
 function MapService() {
     const webViewRef = useRef<WebViewType>(null);
+    const [loaded, setLoaded] = useState(false);
+    const fadeAnim = useRef(new Animated.Value(1)).current;
 
     const changeCssVariables = `
         (function() {
@@ -19,20 +24,38 @@ function MapService() {
         true;
     `;
 
+    const handleLoadEnd = () => {
+        webViewRef.current?.injectJavaScript(changeCssVariables);
+
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+        }).start(() => setLoaded(true));
+    };
+
     return (
         <Tab
             title="Карта"
-            className="flex flex-col flex-1 relative"
+            className="flex flex-col flex-1 relative bg-background"
         >
             <WebView
                 ref={webViewRef}
                 source={{ uri: "https://yuujiso.github.io/aitumap" }}
                 style={{ flex: 1 }}
                 javaScriptEnabled={true}
-                onLoadEnd={() => {
-                    webViewRef.current?.injectJavaScript(changeCssVariables);
-                }}
+                onLoadEnd={handleLoadEnd}
+                cacheEnabled
             />
+
+            {!loaded && (
+                <Animated.View
+                    style={{ opacity: fadeAnim }}
+                    className="absolute z-40 top-0 left-0 w-full h-full bg-background flex justify-center items-center"
+                >
+                    <Loading />
+                </Animated.View>
+            )}
         </Tab>
     );
 }
