@@ -1,5 +1,5 @@
-
 import * as SecureStore from "expo-secure-store";
+
 import { useNavigationTabs } from "~/shared/lib/useNavigationTabs";
 
 function useLogout() {

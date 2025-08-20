@@ -86,7 +86,8 @@ export class AuthService {
             role: user.role?.key ?? undefined,
             group: user.group?.name ?? undefined,
             imageId: user.imageId ?? undefined,
-            scores: user.scores
+            scores: user.scores,
+            barcode: user.barcode
         };
 
         return {

@@ -20,6 +20,6 @@ type RootStackParamList = {
     MapService: StackParam;
 };
 
-export {
+export type {
     RootStackParamList
 }

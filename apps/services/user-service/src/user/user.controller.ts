@@ -8,12 +8,15 @@ import {
     Req,
     HttpStatus,
     UseGuards,
+    Inject,
+    Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthRequest } from 'src/types';
 import { CreateUserDto } from './dto/saveUser.dto';
 import { AuthGuard } from 'src/guard/auth.guard';
-import { ImageClient } from 'src/images/image.client';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Controller('users')
 @UseGuards(AuthGuard)
@@ -21,8 +24,21 @@ export class UserController {
 
     constructor(
         private readonly userService: UserService,
-        private readonly imageClient: ImageClient,
+        @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     ) { }
+
+    @Get('profile')
+    async profile(@Request() req: AuthRequest) {
+
+        const user = await this.userService.find(req.user.barcode);
+
+        console.log(req.user)
+
+        return {
+            statusCode: 200,
+            data: user
+        };
+    }
 
     @Get(':barcode')
     async getUserByBarcode(@Param('barcode') barcode: string) {
@@ -39,50 +55,29 @@ export class UserController {
     }
 
     @Post()
-    async saveUser(@Body() user: CreateUserDto, @Req() { user: { barcode } }: AuthRequest) {
+    async saveUser(
+        @Body() user: CreateUserDto,
+        @Req() { user: { barcode } }: AuthRequest
+    ) {
         const requestUser = await this.userService.find(barcode);
-        const isAdmin = requestUser?.role?.key === 'admin' || requestUser?.role?.key === 'dev';
+        const isAdmin =
+            requestUser?.role?.key === 'admin' || requestUser?.role?.key === 'dev';
 
         if (!requestUser) {
             return {
                 statusCode: HttpStatus.UNAUTHORIZED,
-                message: "Вы не авторизованы"
+                message: 'Вы не авторизованы',
             };
         }
 
-        if (!isAdmin) {
-            if (user.barcode !== requestUser.barcode) {
-                return {
-                    statusCode: HttpStatus.FORBIDDEN,
-                    message: "Вы можете редактировать только свой профиль"
-                };
-            }
-
-            const existingUser = await this.userService.find(user.barcode);
-
-            if (!existingUser) {
-                return {
-                    statusCode: HttpStatus.NOT_FOUND,
-                    message: "Пользователь не найден"
-                };
-            }
-
-            if (existingUser.imageId && existingUser.imageId !== user.imageId) {
-                await this.imageClient.deleteImage(existingUser.imageId);
-            }
-
-            existingUser.imageId = user.imageId;
-
-            return this.userService.save(existingUser);
+        if (!isAdmin && user.barcode !== requestUser.barcode) {
+            return {
+                statusCode: HttpStatus.FORBIDDEN,
+                message: 'Вы можете редактировать только свой профиль',
+            };
         }
 
-        const targetUser = await this.userService.find(user.barcode);
-
-        if (targetUser && targetUser.imageId && targetUser.imageId !== user.imageId) {
-            await this.imageClient.deleteImage(targetUser.imageId);
-        }
-
-        return this.userService.save(user);
+        return this.userService.saveUserWithCache(user, isAdmin);
     }
 
     @Delete(':barcode')

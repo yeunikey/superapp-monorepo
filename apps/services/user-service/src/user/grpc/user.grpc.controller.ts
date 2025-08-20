@@ -1,4 +1,4 @@
-import { Controller, HttpStatus } from "@nestjs/common";
+import { Controller, HttpStatus, Inject } from "@nestjs/common";
 
 import { BarcodeGrpcDto } from "../dto/barcode.grpc.dto";
 import { DeepPartial } from "typeorm";
@@ -7,6 +7,8 @@ import { Metadata } from "@grpc/grpc-js";
 import { SaveUserGrpcDto } from "../dto/saveUser.grpc.dto";
 import { User } from "../entities/user.entity";
 import { UserService } from "../user.service";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
 
 @Controller()
 export class UserGrpcController {
@@ -14,7 +16,8 @@ export class UserGrpcController {
     private readonly SECRET_KEY = process.env.GRPC_TOKEN;
 
     constructor(
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        @Inject(CACHE_MANAGER) private readonly cacheManager: Cache
     ) { }
 
     private validateToken(metadata: Metadata): boolean {
@@ -82,6 +85,9 @@ export class UserGrpcController {
 
         await this.userService.save(data);
 
+        await this.cacheManager.del(`user:${user.barcode}`);
+        await this.cacheManager.del(`user:all`);
+
         return { statusCode: HttpStatus.OK };
     }
 
@@ -93,6 +99,9 @@ export class UserGrpcController {
         }
 
         await this.userService.delete(data.barcode);
+
+        await this.cacheManager.del(`user:${data.barcode}`);
+        await this.cacheManager.del(`user:all`);
 
         return { statusCode: HttpStatus.OK };
     }
