@@ -18,6 +18,24 @@ export class UserService {
         @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     ) { }
 
+    async all() {
+        const cached = await this.cacheManager.get<User>(`user:all`);
+
+        if (cached) {
+            return cached;
+        }
+
+        const users = await this.userRepo.find({
+            loadEagerRelations: true
+        });
+
+        if (users) {
+            await this.cacheManager.set(`user:all`, users, 180 * 1000);
+        }
+
+        return users;
+    }
+
     async find(barcode: string) {
 
         const cached = await this.cacheManager.get<User>(`user:${barcode}`);

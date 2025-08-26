@@ -1,11 +1,44 @@
 "use client"
 
+import { useEffect, useState } from "react";
+
+import { ApiResponse } from "@/types";
+import Avatar from "@/shared/ui/Avatar";
 import Container from "@/shared/ui/Container";
+import { User } from "@/entities/user/types/user";
+import { toast } from "react-toastify";
 import { useAuth } from "@/entities/user/model/useAuth";
+import { userApi } from "@/shared/api/instance";
 
 export default function Home() {
 
-  const { loggedUser } = useAuth();
+  const { loggedUser, token } = useAuth();
+
+  const [users, setUsers] = useState<User[]>([]);
+
+  const fetchUsers = async () => {
+
+    if (!token) {
+      return;
+    }
+
+    await userApi.get<ApiResponse<User[]>>('/users/all', {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    })
+      .then(({ data }) => {
+        if (data.statusCode != 200) {
+          toast.error(data.message)
+          return;
+        }
+        console.log(data)
+        setUsers(data.data)
+      })
+  }
+  useEffect(() => {
+    fetchUsers()
+  }, [token])
 
   if (!loggedUser) {
     return <></>
@@ -98,85 +131,53 @@ export default function Home() {
             <div className="bg-background w-[95%] h-0.5" />
           </div>
 
-          <div className="py-4 px-6 grid grid-cols-2">
-            <div className="flex gap-4 items-center">
-              <img className="rounded-full w-10 h-10 bg-secondary" src={`http://${process.env.NEXT_PUBLIC_HOST}:4003/images/${loggedUser.imageId}`} />
-              <div className="text-lg font-semibold text-dark">
-                Ерасыл Унербек
-              </div>
-            </div>
-            <div className="grid grid-cols-3 items-center">
-              <div className="">
-                <div className="bg-red py-1 px-4 rounded-full text-white w-fit text-sm">
-                  Разработчик
+          {users.map((user) => (
+            <div key={user.id}>
+              <div className="py-4 px-6 grid grid-cols-2">
+                <div className="flex gap-4 items-center">
+                  <Avatar user={user} />
+                  <div className="text-lg font-semibold text-dark">
+                    {user.surname} {user.name}
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 items-center">
+                  <div>
+                    {user.role ? (
+                      <div className="bg-red py-1 px-4 rounded-full text-white w-fit text-sm">
+                        {user.role?.name ?? "—"}
+                      </div>
+                    ) : (
+                      <div className="bg-primary py-1 px-4 rounded-full text-white w-fit text-sm">
+                        Студент
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-secondary text-sm">
+                    {user.group?.name ?? "—"}
+                  </div>
+                  <div className="flex gap-3 items-center text-sm text-secondary">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="18px"
+                      viewBox="0 -960 960 960"
+                      width="18px"
+                      fill="#9BA3AE"
+                    >
+                      <path d="M360-360H236q-24 0-35.5-21.5T203-423l299-430q10-14 26-19.5t33 .5q17 6 25 21t6 32l-32 259h155q26 0 36.5 23t-6.5 43L416-100q-11 13-27 17t-31-3q-15-7-23.5-21.5T328-139l32-221Z" />
+                    </svg>
+                    {user.scores}
+                  </div>
                 </div>
               </div>
-              <div className="text-secondary text-sm">
-                SE-2402
-              </div>
-              <div className="flex gap-3 items-center text-sm text-secondary">
-                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#9BA3AE"><path d="M360-360H236q-24 0-35.5-21.5T203-423l299-430q10-14 26-19.5t33 .5q17 6 25 21t6 32l-32 259h155q26 0 36.5 23t-6.5 43L416-100q-11 13-27 17t-31-3q-15-7-23.5-21.5T328-139l32-221Z" /></svg>
-                8
-              </div>
-            </div>
-          </div>
 
-          <div className="flex justify-center">
-            <div className="bg-background w-[95%] h-0.5" />
-          </div>
-
-          <div className="py-4 px-6 grid grid-cols-2">
-            <div className="flex gap-4 items-center">
-              <img className="rounded-full w-10 h-10 bg-secondary" src={`http://${process.env.NEXT_PUBLIC_HOST}:4003/images/${loggedUser.imageId}`} />
-              <div className="text-lg font-semibold text-dark">
-                Ерасыл Унербек
+              <div className="flex justify-center">
+                <div className="bg-background w-[95%] h-0.5" />
               </div>
             </div>
-            <div className="grid grid-cols-3 items-center">
-              <div className="">
-                <div className="bg-red py-1 px-4 rounded-full text-white w-fit text-sm">
-                  Разработчик
-                </div>
-              </div>
-              <div className="text-secondary text-sm">
-                SE-2402
-              </div>
-              <div className="flex gap-3 items-center text-sm text-secondary">
-                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#9BA3AE"><path d="M360-360H236q-24 0-35.5-21.5T203-423l299-430q10-14 26-19.5t33 .5q17 6 25 21t6 32l-32 259h155q26 0 36.5 23t-6.5 43L416-100q-11 13-27 17t-31-3q-15-7-23.5-21.5T328-139l32-221Z" /></svg>
-                8
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-center">
-            <div className="bg-background w-[95%] h-0.5" />
-          </div>
-
-          <div className="py-4 px-6 grid grid-cols-2">
-            <div className="flex gap-4 items-center">
-              <img className="rounded-full w-10 h-10 bg-secondary" src={`http://${process.env.NEXT_PUBLIC_HOST}:4003/images/${loggedUser?.imageId ?? ''}`} />
-              <div className="text-lg font-semibold text-dark">
-                Ерасыл Унербек
-              </div>
-            </div>
-            <div className="grid grid-cols-3 items-center">
-              <div className="">
-                <div className="bg-red py-1 px-4 rounded-full text-white w-fit text-sm">
-                  Разработчик
-                </div>
-              </div>
-              <div className="text-secondary text-sm">
-                SE-2402
-              </div>
-              <div className="flex gap-3 items-center text-sm text-secondary">
-                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#9BA3AE"><path d="M360-360H236q-24 0-35.5-21.5T203-423l299-430q10-14 26-19.5t33 .5q17 6 25 21t6 32l-32 259h155q26 0 36.5 23t-6.5 43L416-100q-11 13-27 17t-31-3q-15-7-23.5-21.5T328-139l32-221Z" /></svg>
-                8
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
-    </Container>
+    </Container >
   );
 }

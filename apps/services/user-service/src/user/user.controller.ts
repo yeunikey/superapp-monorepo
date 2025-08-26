@@ -9,7 +9,6 @@ import {
     HttpStatus,
     UseGuards,
     Inject,
-    Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthRequest } from 'src/types';
@@ -27,16 +26,28 @@ export class UserController {
         @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     ) { }
 
-    @Get('profile')
-    async profile(@Request() req: AuthRequest) {
+    @Get('/all')
+    async getAllUsers(@Req() { user: { barcode } }: AuthRequest) {
 
-        const user = await this.userService.find(req.user.barcode);
+        const user = await this.userService.find(barcode);
 
-        console.log(req.user)
+        if (!user) {
+            return {
+                statusCode: HttpStatus.NOT_FOUND,
+                message: "Такого юзера не существует"
+            }
+        }
+
+        if (!user.role || !['admin', 'dev'].includes(user.role.key)) {
+            return {
+                statusCode: HttpStatus.NOT_FOUND,
+                message: "Такого юзера не существует"
+            }
+        }
 
         return {
-            statusCode: 200,
-            data: user
+            statusCode: HttpStatus.OK,
+            data: await this.userService.all()
         };
     }
 

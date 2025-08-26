@@ -11,5 +11,5 @@ function useLogout() {
             animation: "slide_from_right",
         });
     };
-}
+} 
 export default useLogout;

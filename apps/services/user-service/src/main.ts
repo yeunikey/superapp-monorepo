@@ -26,6 +26,7 @@ async function bootstrap() {
       transform: true          // преобразует типы (например, строку в число)
     })
   );
+  app.enableCors();
 
   await app.startAllMicroservices(); // старт gRPC
   await app.listen(process.env.USER_SERVICE_PORT ?? 4001); // старт HTTP
