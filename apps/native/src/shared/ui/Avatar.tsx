@@ -1,4 +1,5 @@
 import { Image, Text, View } from "react-native";
+
 import { User } from "~/entities/student/types/user";
 import { cn } from "../module/merge";
 import { host } from "../api/instance";

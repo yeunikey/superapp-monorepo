@@ -7,6 +7,7 @@ import useLogout from "~/features/settings/model/logout";
 
 function SettingsTab() {
     const logout = useLogout();
+
     return (
         <Tab title="Персональные данные" className="flex flex-col flex-1 relative">
             <ScrollView className="p-6 flex-1">
