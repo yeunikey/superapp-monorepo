@@ -13,6 +13,10 @@ export const userApi = xior.create({
     headers: defaultOptions
 });
 
+export const imageApi = xior.create({
+    baseURL: `${host}:4003`,
+});
+
 export const authApi = xior.create({
     baseURL: `${host}:4002`,
     headers: defaultOptions

@@ -6,6 +6,7 @@ import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
 import { CreateUserDto } from "./dto/saveUser.dto";
 import { ImageClient } from "src/images/image.client";
+import { GroupService } from "src/groups/group.service";
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,7 @@ export class UserService {
         @InjectRepository(User)
         private userRepo: Repository<User>,
         private readonly imageClient: ImageClient,
+        private readonly groupService: GroupService,
 
         @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     ) { }
@@ -64,26 +66,48 @@ export class UserService {
     }
 
     async delete(id: string) {
-
-        const user = await this.userRepo.findOne({ where: { barcode: id } });
+        const user = await this.userRepo.findOne({
+            where: { barcode: id },
+            relations: ["role"],
+        });
 
         if (!user) {
-            return null;
+            return {
+                statusCode: HttpStatus.NOT_FOUND,
+                message: "Пользователь не найден",
+            };
+        }
+
+        if (user.role) {
+            return {
+                statusCode: HttpStatus.FORBIDDEN,
+                message: "Нельзя удалить пользователя с назначенной ролью",
+            };
+        }
+
+        if (user.imageId) {
+            await this.imageClient.deleteImage(user.imageId);
         }
 
         await this.cacheManager.del(`user:${user.barcode}`);
+        await this.cacheManager.del("user:all");
 
-        return this.userRepo.delete(user.id);
+        await this.userRepo.delete(user.id);
+
+        return {
+            statusCode: HttpStatus.OK,
+            message: "Пользователь успешно удален",
+        };
     }
 
-    async saveUserWithCache(user: CreateUserDto, isAdmin: boolean) {
+    async saveUserWithCache(user: CreateUserDto) {
 
         const existingUser = await this.userRepo.findOne({
             where: { barcode: user.barcode },
             loadEagerRelations: true
         });
 
-        if (!existingUser && !isAdmin) {
+        if (!existingUser) {
             return {
                 statusCode: HttpStatus.NOT_FOUND,
                 message: 'Пользователь не найден',
@@ -94,19 +118,86 @@ export class UserService {
             await this.imageClient.deleteImage(existingUser.imageId);
         }
 
-        const entityToSave = isAdmin
-            ? this.userRepo.create(user)
-            : { ...existingUser, imageId: user.imageId };
+        const entityToSave = { ...existingUser, imageId: user.imageId };
 
         const savedUser = await this.userRepo.save(entityToSave);
-
-        console.log(savedUser);
 
         await this.cacheManager.set(`user:${savedUser.barcode}`, savedUser, 180 * 1000);
         await this.cacheManager.del('user:all');
 
-        return savedUser;
+        return {
+            statusCode: HttpStatus.OK,
+            data: savedUser
+        };
     }
 
+    async new(user: CreateUserDto) {
+
+        const barcodeTaken = await this.userRepo.findOne({
+            where: { barcode: user.barcode },
+        });
+
+        if (barcodeTaken) {
+            return {
+                statusCode: HttpStatus.CONFLICT,
+                message: `Пользователь с barcode ${user.barcode} уже существует`,
+            };
+        }
+
+        const entityToSave = this.userRepo.create(user);
+
+        const savedUser = await this.userRepo.save(entityToSave);
+
+        await this.cacheManager.set(`user:${savedUser.barcode}`, savedUser, 180 * 1000);
+        await this.cacheManager.del('user:all');
+
+        return {
+            statusCode: HttpStatus.OK,
+            data: savedUser
+        };
+    }
+
+    async edit(user: CreateUserDto) {
+        const existingUser = await this.userRepo.findOne({
+            where: { barcode: user.barcode },
+            relations: ["group"]
+        });
+
+        if (!existingUser) {
+            return {
+                statusCode: HttpStatus.NOT_FOUND,
+                message: "Такого пользователя не существует"
+            };
+        }
+
+        // если было изображение и оно меняется → удалить старое
+        if (existingUser.imageId && existingUser.imageId !== user.imageId) {
+            await this.imageClient.deleteImage(existingUser.imageId);
+        }
+
+        // обновляем обычные поля
+        existingUser.name = user.name;
+        existingUser.surname = user.surname;
+
+        // группа
+        if (user.group === null) {
+            existingUser.group = null;
+        } else if (user.group?.id) {
+            existingUser.group = await this.groupService.findById(user.group.id);
+        }
+
+        // новое изображение
+        existingUser.imageId = user.imageId ?? null;
+
+        const savedUser = await this.userRepo.save(existingUser);
+
+        await this.cacheManager.set(`user:${savedUser.barcode}`, savedUser, 180 * 1000);
+        await this.cacheManager.del("user:all");
+
+        return {
+            statusCode: HttpStatus.OK,
+            data: savedUser
+        };
+    }
 
 }

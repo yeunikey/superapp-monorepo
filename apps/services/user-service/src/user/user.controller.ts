@@ -70,30 +70,66 @@ export class UserController {
         @Body() user: CreateUserDto,
         @Req() { user: { barcode } }: AuthRequest
     ) {
-        const requestUser = await this.userService.find(barcode);
-        const isAdmin =
-            requestUser?.role?.key === 'admin' || requestUser?.role?.key === 'dev';
-
-        if (!requestUser) {
-            return {
-                statusCode: HttpStatus.UNAUTHORIZED,
-                message: 'Вы не авторизованы',
-            };
-        }
-
-        if (!isAdmin && user.barcode !== requestUser.barcode) {
+        if (barcode !== user.barcode) {
             return {
                 statusCode: HttpStatus.FORBIDDEN,
-                message: 'Вы можете редактировать только свой профиль',
+                message: 'Вы можете изменять только своё изображение',
             };
         }
 
-        return this.userService.saveUserWithCache(user, isAdmin);
+        return this.userService.saveUserWithCache(user);
+    }
+
+    @Post('/new')
+    async new(
+        @Body() user: CreateUserDto,
+        @Req() { user: { barcode } }: AuthRequest
+    ) {
+        const currentUser = await this.userService.find(barcode);
+
+        if (!currentUser || !currentUser.role || !['admin', 'dev'].includes(currentUser.role.key)) {
+            return {
+                statusCode: HttpStatus.FORBIDDEN,
+                message: 'Нет прав для выполнения операции',
+            };
+        }
+
+        return this.userService.new(user);
+    }
+
+    @Post('/edit')
+    async edit(
+        @Body() user: CreateUserDto,
+        @Req() { user: { barcode } }: AuthRequest
+    ) {
+        const currentUser = await this.userService.find(barcode);
+
+        if (!currentUser || !currentUser.role || !['admin', 'dev'].includes(currentUser.role.key)) {
+            return {
+                statusCode: HttpStatus.FORBIDDEN,
+                message: 'Нет прав для выполнения операции',
+            };
+        }
+
+        return this.userService.edit(user);
     }
 
     @Delete(':barcode')
-    async deleteUser(@Param('barcode') barcode: string) {
-        return this.userService.delete(barcode);
+    async deleteUser(
+        @Param('barcode') deleteBarcode: string,
+        @Req() { user: { barcode } }: AuthRequest
+    ) {
+
+        const currentUser = await this.userService.find(barcode);
+
+        if (!currentUser || !currentUser.role || !['admin', 'dev'].includes(currentUser.role.key)) {
+            return {
+                statusCode: HttpStatus.FORBIDDEN,
+                message: 'Нет прав для выполнения операции',
+            };
+        }
+
+        return this.userService.delete(deleteBarcode);
     }
 
 }

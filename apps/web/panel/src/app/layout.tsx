@@ -2,7 +2,7 @@ import "./globals.css";
 
 import Authorize from "@/features/auth/ui/Authorize";
 import { Golos_Text } from "next/font/google";
-import Header from "@/widgets/header/ui/Header";
+import Header from "@/shared/ui/Header";
 import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
 
@@ -31,8 +31,6 @@ export default function RootLayout({
 
         <Authorize>
           <div className="flex flex-col h-full">
-            <Header />
-
             {children}
           </div>
         </Authorize>

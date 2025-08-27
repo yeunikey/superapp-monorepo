@@ -4,9 +4,9 @@ import { ReactNode, useEffect } from 'react';
 
 import { ApiResponse } from '@/types';
 import Cookies from 'js-cookie'
-import { User } from '@/entities/user/types/user';
+import { User } from '@/entities/data/types/user';
 import { authApi } from '@/shared/api/instance';
-import { useAuth } from "@/entities/user/model/useAuth";
+import { useAuth } from "@/entities/data/model/useAuth";
 
 type AuthProps = {
     children?: ReactNode

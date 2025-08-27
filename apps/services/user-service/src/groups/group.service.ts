@@ -11,11 +11,28 @@ export class GroupService {
     constructor(
         @InjectRepository(Group)
         private groupRepository: Repository<Group>,
-        
+
         @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     ) { }
 
-    async find(code: string) {
+    async all() {
+
+        const cached = await this.cacheManager.get<Group>(`group:all`);
+
+        if (cached) {
+            return cached;
+        }
+
+        const groups = await this.groupRepository.find();
+
+        if (groups) {
+            await this.cacheManager.set(`group:all`, groups, 180 * 1000);
+        }
+
+        return groups;
+    }
+
+    async findByName(code: string) {
 
         const cached = await this.cacheManager.get<Group>(`group:${code}`);
         if (cached) {
@@ -30,6 +47,26 @@ export class GroupService {
 
         if (group) {
             await this.cacheManager.set(`group:${code}`, group, 180 * 1000);
+        }
+
+        return group;
+    }
+
+    async findById(id: number) {
+
+        const cached = await this.cacheManager.get<Group>(`group:id:${id}`);
+        if (cached) {
+            return cached;
+        }
+
+        const group = await this.groupRepository.findOne({
+            where: {
+                id
+            }
+        });
+
+        if (group) {
+            await this.cacheManager.set(`group:id:${id}`, group, 180 * 1000);
         }
 
         return group;

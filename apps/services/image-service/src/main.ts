@@ -17,6 +17,7 @@ async function bootstrap() {
       url: `0.0.0.0:${process.env.IMAGE_SERVICE_GRPC_PORT ?? 5003}`,
     },
   });
+  app.enableCors();
 
   await app.startAllMicroservices(); // старт gRPC
   await app.listen(process.env.IMAGE_SERVICE_PORT ?? 4003); // старт HTTP

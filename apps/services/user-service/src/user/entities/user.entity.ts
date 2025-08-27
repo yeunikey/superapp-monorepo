@@ -21,22 +21,23 @@ export class User {
 
 
     @ManyToOne(() => Group, (group) => group.users, {
-        eager: true
+        eager: true,
+        nullable: true
     })
-    group?: Group;
+    group: Group | null;
 
     @ManyToOne(() => Role, (role) => role.users, {
         eager: true,
         nullable: true
     })
-    role?: Role;
+    role: Role;
 
     @Column({
         default: 0
     })
     scores: number;
 
-    @Column({ nullable: true })
-    imageId?: string
+    @Column({ type: "varchar", nullable: true })
+    imageId: string | null;
 
 }

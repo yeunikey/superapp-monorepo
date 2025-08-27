@@ -1,4 +1,4 @@
-import { User } from "@/entities/user/types/user";
+import { User } from "@/entities/data/types/user";
 import { cn } from "../lib/merge";
 
 type AvatarType = {

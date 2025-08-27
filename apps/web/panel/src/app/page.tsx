@@ -1,183 +1,38 @@
-"use client"
+"use client";;
 
-import { useEffect, useState } from "react";
-
-import { ApiResponse } from "@/types";
-import Avatar from "@/shared/ui/Avatar";
-import Container from "@/shared/ui/Container";
-import { User } from "@/entities/user/types/user";
-import { toast } from "react-toastify";
-import { useAuth } from "@/entities/user/model/useAuth";
-import { userApi } from "@/shared/api/instance";
+import AddModal from "@/features/users/ui/AddModal";
+import Controls from "@/widgets/users/Controls";
+import EditModal from "@/features/users/ui/EditModal";
+import UsersTable from "@/widgets/users/UsersTable";
+import View from "@/shared/ui/View";
+import { fetchUsers } from "@/features/users/model/usersService";
+import { useAuth } from "@/entities/data/model/useAuth";
+import { useEffect } from "react";
 
 export default function Home() {
 
-  const { loggedUser, token } = useAuth();
+  const { token } = useAuth();
 
-  const [users, setUsers] = useState<User[]>([]);
-
-  const fetchUsers = async () => {
-
-    if (!token) {
-      return;
-    }
-
-    await userApi.get<ApiResponse<User[]>>('/users/all', {
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    })
-      .then(({ data }) => {
-        if (data.statusCode != 200) {
-          toast.error(data.message)
-          return;
-        }
-        console.log(data)
-        setUsers(data.data)
-      })
-  }
   useEffect(() => {
     fetchUsers()
   }, [token])
 
-  if (!loggedUser) {
-    return <></>
-  }
-
   return (
-    <Container className="flex flex-col md:flex-row grow h-full gap-12 py-12">
+    <View>
 
-      <div className="w-72 flex flex-col gap-12">
-        <div className="w-full flex flex-col gap-1">
-          <div className="w-full py-3 px-6 bg-white rounded-4xl cursor-pointer flex gap-3 items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="fill-secondary" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M40-240q-17 0-28.5-11.5T0-280v-23q0-43 44-70t116-27q13 0 25 .5t23 2.5q-14 21-21 44t-7 48v65H40Zm240 0q-17 0-28.5-11.5T240-280v-25q0-32 17.5-58.5T307-410q32-20 76.5-30t96.5-10q53 0 97.5 10t76.5 30q32 20 49 46.5t17 58.5v25q0 17-11.5 28.5T680-240H280Zm500 0v-65q0-26-6.5-49T754-397q11-2 22.5-2.5t23.5-.5q72 0 116 26.5t44 70.5v23q0 17-11.5 28.5T920-240H780ZM160-440q-33 0-56.5-23.5T80-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T160-440Zm640 0q-33 0-56.5-23.5T720-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T800-440Zm-320-40q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T600-600q0 50-34.5 85T480-480Z" /></svg>
-            <div className="text-dark">
-              Пользователи
-            </div>
-          </div>
+      {/* Modals */}
+      <AddModal />
+      <EditModal />
 
-          <div className="w-full py-3 px-6 rounded-4xl cursor-pointer flex gap-3 items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="fill-secondary" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M760-440h-80q-17 0-28.5-11.5T640-480q0-17 11.5-28.5T680-520h80q17 0 28.5 11.5T800-480q0 17-11.5 28.5T760-440ZM584-288q10-14 26-16t30 8l64 48q14 10 16 26t-8 30q-10 14-26 16t-30-8l-64-48q-14-10-16-26t8-30Zm120-424-64 48q-14 10-30 8t-26-16q-10-14-8-30t16-26l64-48q14-10 30-8t26 16q10 14 8 30t-16 26ZM280-360H160q-17 0-28.5-11.5T120-400v-160q0-17 11.5-28.5T160-600h120l132-132q19-19 43.5-8.5T480-703v446q0 27-24.5 37.5T412-228L280-360Z" /></svg>
-            <div className="text-secondary">
-              Новости
-            </div>
-          </div>
-          <div className="w-full py-3 px-6 rounded-4xl cursor-pointer flex gap-3 items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="fill-secondary" height="24px" viewBox="0 -960 960 960" width="24px" fill="#9BA3AE"><path d="M40-80q-17 0-28.5-11.5T0-120v-23q0-31 23-54t63-34q26-8 47-9t45 1q10 1 14.5 9.5t.5 17.5q-7 16-10 32.5t-3 34.5v25q0 17-11.5 28.5T140-80H40Zm240 0q-17 0-28.5-11.5T240-120v-25q0-65 66.5-105T480-290q108 0 174 40t66 105v25q0 17-11.5 28.5T680-80H280Zm540 0q-17 0-28.5-11.5T780-120v-25q0-18-3-34.5T767-212q-4-9 .5-17.5T782-239q24-2 45-1t47 9q40 11 63 34t23 54v23q0 17-11.5 28.5T920-80H820ZM160-280q-33 0-56.5-23.5T80-360q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T160-280Zm640 0q-33 0-56.5-23.5T720-360q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T800-280Zm-320-40q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T600-440q0 50-34.5 85T480-320Zm0-420q39-47 96-73.5T696-840q110 0 187 77t77 187q0 19-2.5 37.5T950-502q-5 17-19 27t-31 5q-16-4-24.5-18t-3.5-30q4-14 6-28.5t2-29.5q0-77-53.5-130.5T696-760q-55 0-100 30.5T515-657q-14 17-35 17t-35-17q-35-42-80.5-72.5T264-760q-77 0-130.5 53.5T80-576q0 15 2 29.5t6 28.5q4 15-4.5 28.5T60-472q-17 5-31-4t-19-26q-5-18-7.5-36.5T0-576q0-110 77-187t187-77q63 0 120 26.5t96 73.5Z" /></svg>
-            <div className="text-secondary">
-              Клубы
-            </div>
-          </div>
-          <div className="w-full py-3 px-6 rounded-4xl cursor-pointer flex gap-3 items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="fill-secondary" height="24px" viewBox="0 -960 960 960" width="24px" fill="#9BA3AE"><path d="M400-496v-144q0-17-11.5-28.5T360-680q-17 0-28.5 11.5T320-640v159q0 8 3 15.5t9 13.5l112 112q11 11 28 11t28-11q11-11 11-28t-11-28L400-496Zm480 16q0-72-33.5-133.5T754-713q-14-9-19-25t2-31q8-16 24-21t30 4q78 49 123.5 130T960-480q0 95-45.5 176T791-174q-14 9-30 4t-24-21q-7-15-2-31t19-25q59-38 92.5-99.5T880-480ZM360-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T0-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T360-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T720-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T360-120Z" /></svg>
-            <div className="text-secondary">
-              Мероприятия
-            </div>
-          </div>
-          <div className="w-full py-3 px-6 rounded-4xl cursor-pointer flex gap-3 items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="fill-secondary" height="24px" viewBox="0 -960 960 960" width="24px" fill="#9BA3AE"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80Zm-80 400q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H587l-74 110q-6 9-14.5 13.5T480-112q-10 0-18.5-4.5T447-130l-74-110H160Z" /></svg>
-            <div className="text-secondary">
-              Жалобы и предложения
-            </div>
-          </div>
-        </div>
+      {/* Content */}
+
+      <div className="text-3xl font-semibold text-dark">
+        Управление пользователями
       </div>
 
-      <div className="flex-1 grow">
-        <div className="text-3xl font-semibold text-dark">
-          Управление пользователями
-        </div>
+      <Controls />
+      <UsersTable />
 
-        <div className="mt-6 flex gap-6">
-          <div className="flex items-center bg-white py-2 px-4 rounded-4xl focus-within:outline-2 outline-primary w-80">
-            <input
-              type="text"
-              placeholder="Поиск по ФИО, баркоду и группе..."
-              className="outline-none text-dark bg-transparent w-full"
-            />
-          </div>
-
-          <div className="flex gap-3">
-            <div className="bg-primary rounded-full py-2 px-6 text-white cursor-pointer">
-              Добавить
-            </div>
-
-            <div className="outline-primary outline-2 rounded-full py-2 px-6 text-primary cursor-pointer">
-              Экспорт
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-12 bg-white rounded-4xl flex flex-col">
-
-          <div className="py-6 px-6 grid grid-cols-2">
-            <div className="text-secondary">
-              Изображение, ФИО
-            </div>
-            <div className="grid grid-cols-3">
-              <div className="text-secondary">
-                Роль
-              </div>
-              <div className="text-secondary">
-                Группа
-              </div>
-              <div className="text-secondary">
-                Очки
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-center">
-            <div className="bg-background w-[95%] h-0.5" />
-          </div>
-
-          {users.map((user) => (
-            <div key={user.id}>
-              <div className="py-4 px-6 grid grid-cols-2">
-                <div className="flex gap-4 items-center">
-                  <Avatar user={user} />
-                  <div className="text-lg font-semibold text-dark">
-                    {user.surname} {user.name}
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 items-center">
-                  <div>
-                    {user.role ? (
-                      <div className="bg-red py-1 px-4 rounded-full text-white w-fit text-sm">
-                        {user.role?.name ?? "—"}
-                      </div>
-                    ) : (
-                      <div className="bg-primary py-1 px-4 rounded-full text-white w-fit text-sm">
-                        Студент
-                      </div>
-                    )}
-                  </div>
-                  <div className="text-secondary text-sm">
-                    {user.group?.name ?? "—"}
-                  </div>
-                  <div className="flex gap-3 items-center text-sm text-secondary">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="18px"
-                      viewBox="0 -960 960 960"
-                      width="18px"
-                      fill="#9BA3AE"
-                    >
-                      <path d="M360-360H236q-24 0-35.5-21.5T203-423l299-430q10-14 26-19.5t33 .5q17 6 25 21t6 32l-32 259h155q26 0 36.5 23t-6.5 43L416-100q-11 13-27 17t-31-3q-15-7-23.5-21.5T328-139l32-221Z" />
-                    </svg>
-                    {user.scores}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-center">
-                <div className="bg-background w-[95%] h-0.5" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-    </Container >
+    </View>
   );
 }

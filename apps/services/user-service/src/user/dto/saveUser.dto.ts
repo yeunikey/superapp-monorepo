@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer";
-import { IsOptional, IsString, ValidateNested, IsNumber } from "class-validator";
+import { IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
 
 class RoleDto {
   @Expose()
@@ -60,11 +60,11 @@ export class CreateUserDto {
   @ValidateNested()
   @Type(() => RoleDto)
   @IsOptional()
-  role?: RoleDto;
+  role: RoleDto;
 
   @Expose()
   @ValidateNested()
   @Type(() => GroupDto)
   @IsOptional()
-  group?: GroupDto;
+  group: GroupDto | null;
 }
