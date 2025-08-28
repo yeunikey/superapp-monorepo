@@ -1,6 +1,6 @@
 import Avatar from "@/shared/ui/Avatar";
 import { User } from "@/entities/data/types/user";
-import { useEditModal } from "@/features/users/model/modal/useEditModal";
+import { useUserEditModal } from "@/features/users/model/modal/useUserEditModal";
 import { useUsers } from "@/entities/data/model/useUsers";
 import { useUsersStore } from "@/features/users/model/useUsersStore";
 
@@ -10,7 +10,7 @@ function UsersTable() {
     const { searchText } = useUsersStore();
 
     const { setEditModal } = useUsersStore();
-    const { setUser } = useEditModal();
+    const { setUser } = useUserEditModal();
 
     const drawUser = (user: User) => {
         return (

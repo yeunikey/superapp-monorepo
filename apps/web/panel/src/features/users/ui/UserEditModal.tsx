@@ -1,3 +1,4 @@
+
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
@@ -9,13 +10,13 @@ import { User } from "@/entities/data/types/user";
 import { fetchGroups } from "../model/usersService";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
-import { useEditModal } from "../model/modal/useEditModal";
+import { useUserEditModal } from "../model/modal/useUserEditModal";
 import { useGroups } from "@/entities/data/model/useGroups";
 import { useUsers } from "@/entities/data/model/useUsers";
 import { useUsersStore } from "../model/useUsersStore";
 import xior from "xior";
 
-function EditModal() {
+function UserEditModal() {
     const { editModal, setEditModal } = useUsersStore();
     const { token } = useAuth();
 
@@ -30,7 +31,7 @@ function EditModal() {
         setGroup,
         resetForm,
         user,
-    } = useEditModal();
+    } = useUserEditModal();
 
     const { groups } = useGroups();
     const { users, setUsers } = useUsers();
@@ -38,6 +39,7 @@ function EditModal() {
     const [image, setImage] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [removeImage, setRemoveImage] = useState(false);
+    const [existingImageId, setExistingImageId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchGroups();
@@ -91,6 +93,8 @@ function EditModal() {
                 );
 
                 imageId = uploadRes.data.data.id;
+            } else {
+                imageId = existingImageId;
             }
 
             const payload: {
@@ -101,7 +105,6 @@ function EditModal() {
                 imageId?: string | null;
             } = { barcode, name, surname };
 
-            // группа
             if (!group.trim()) {
                 payload.group = null;
             } else {
@@ -113,7 +116,6 @@ function EditModal() {
                 payload.group = { id: selectedGroup.id };
             }
 
-            // картинка
             if (imageId !== undefined) {
                 payload.imageId = imageId;
             }
@@ -157,6 +159,7 @@ function EditModal() {
             setSurname(user.surname);
             setGroup(user.group?.name || "");
             setRemoveImage(false);
+            setExistingImageId(user.imageId ?? null); // 👈 сохраняем старую картинку
 
             if (user.imageId) {
                 setPreview(`${host}:4003/images/${user.imageId}`);
@@ -166,6 +169,7 @@ function EditModal() {
             setImage(null);
             setPreview(null);
             setRemoveImage(false);
+            setExistingImageId(null);
         }
     }, [editModal, user]);
 
@@ -319,4 +323,4 @@ function EditModal() {
     );
 }
 
-export default EditModal;
+export default UserEditModal;

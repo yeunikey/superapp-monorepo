@@ -1,23 +1,21 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
-import { host, imageApi, userApi } from "@/shared/api/instance";
+import { host, userApi } from "@/shared/api/instance";
 
 import { ApiResponse } from "@/types";
 import Modal from "@/shared/ui/Modal";
 import { User } from "@/entities/data/types/user";
-import { cn } from "@/shared/lib/merge";
 import { fetchGroups } from "../model/usersService";
-import { headers } from "next/headers";
 import { toast } from "react-toastify";
-import { useAddModal } from "../model/modal/useAddModal";
+import { useUserAddModal } from "../model/modal/useUserAddModal";
 import { useAuth } from "@/entities/data/model/useAuth";
 import { useGroups } from "@/entities/data/model/useGroups";
 import { useUsers } from "@/entities/data/model/useUsers";
 import { useUsersStore } from "../model/useUsersStore";
 import xior from "xior";
 
-function AddModal() {
+function UserAddModal() {
     const { addModal, setAddModal } = useUsersStore();
     const { token } = useAuth();
 
@@ -27,7 +25,7 @@ function AddModal() {
         surname, setSurname,
         group, setGroup,
         resetForm
-    } = useAddModal();
+    } = useUserAddModal();
 
     const { groups } = useGroups();
     const { users, setUsers } = useUsers();
@@ -224,4 +222,4 @@ function AddModal() {
     );
 }
 
-export default AddModal;
+export default UserAddModal;

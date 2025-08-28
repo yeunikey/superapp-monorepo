@@ -1,15 +1,15 @@
 "use client";;
 
-import AddModal from "@/features/users/ui/AddModal";
+import UserAddModal from "@/features/users/ui/UserAddModal";
 import Controls from "@/widgets/users/Controls";
-import EditModal from "@/features/users/ui/EditModal";
+import UserEditModal from "@/features/users/ui/UserEditModal";
 import UsersTable from "@/widgets/users/UsersTable";
 import View from "@/shared/ui/View";
 import { fetchUsers } from "@/features/users/model/usersService";
 import { useAuth } from "@/entities/data/model/useAuth";
 import { useEffect } from "react";
 
-export default function Home() {
+export default function Users() {
 
   const { token } = useAuth();
 
@@ -21,8 +21,8 @@ export default function Home() {
     <View>
 
       {/* Modals */}
-      <AddModal />
-      <EditModal />
+      <UserAddModal />
+      <UserEditModal />
 
       {/* Content */}
 

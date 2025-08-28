@@ -2,7 +2,6 @@ import "./globals.css";
 
 import Authorize from "@/features/auth/ui/Authorize";
 import { Golos_Text } from "next/font/google";
-import Header from "@/shared/ui/Header";
 import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
 

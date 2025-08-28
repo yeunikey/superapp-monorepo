@@ -21,7 +21,7 @@ type UsersStore = {
     resetForm: () => void;
 };
 
-export const useEditModal = create<UsersStore>((set) => ({
+export const useUserEditModal = create<UsersStore>((set) => ({
 
     user: null,
     setUser: (user) => set({ user }),
