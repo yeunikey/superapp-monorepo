@@ -1,18 +1,24 @@
-import { Module, forwardRef } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 
-import { GroupModule } from "src/groups/group.module";
-import { ImageClient } from "../images/image.client";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "./entities/news.entity";
-import { UserController } from "./user.controller";
-import { UserGrpcController } from "./grpc/user.grpc.controller";
-import { UserService } from "./user.service";
+import { New } from "./entities/news.entity";
+import { NewController } from "./news.controller";
+import { NewService } from "./news.service";
+import { UserClient } from "src/users/user.client";
+import { ImageClient } from "src/images/image.client";
 
 @Module({
-  controllers: [UserController],
-  providers: [UserService, ImageClient],
-  imports: [TypeOrmModule.forFeature([User])],
-  exports: [UserService, TypeOrmModule],
+  controllers: [
+    NewController
+  ],
+  providers: [
+    NewService,
+    UserClient, ImageClient
+  ],
+  imports: [
+    TypeOrmModule.forFeature([New])
+  ],
+  exports: [NewService, TypeOrmModule],
 })
 
 export class NewsModule { }
