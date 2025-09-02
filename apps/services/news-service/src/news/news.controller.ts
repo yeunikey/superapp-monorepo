@@ -23,16 +23,7 @@ export class NewController {
     ) { }
 
     @Get('/all')
-    async getAll(@Req() { user: { barcode } }: AuthRequest) {
-
-        const { data: currentUser } = await this.userClient.getUserByBarcode(barcode);
-
-        if (!currentUser || !currentUser.role || !['admin', 'dev'].includes(currentUser.role.key)) {
-            return {
-                statusCode: HttpStatus.FORBIDDEN,
-                message: 'Нет прав для просмотра новостей',
-            };
-        }
+    async getAll() {
 
         return {
             statusCode: HttpStatus.OK,
@@ -95,8 +86,8 @@ export class NewController {
     }
 
     @Delete(':id')
-   @UseGuards(AuthGuard)
- async delete(
+    @UseGuards(AuthGuard)
+    async delete(
         @Param('id') id: number,
         @Req() { user: { barcode } }: AuthRequest,
     ) {
