@@ -16,7 +16,7 @@ function Modal({ close, onClose, title, parentClassName, className, children }: 
     return (
         <>
             {close && (
-                <div className="fixed top-0 left-0 h-dvh w-dvw bg-black/35 flex justify-center items-center" onClick={onClose}>
+                <div className="fixed z-[9999] top-0 left-0 h-dvh w-dvw bg-black/35 flex justify-center items-center" onClick={onClose}>
                     <div className={cn("z-10 bg-white rounded-4xl w-lg min-h-64 p-6", parentClassName)}
                         onClick={(e) => e.stopPropagation()}
                     >

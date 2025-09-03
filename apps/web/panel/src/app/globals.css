@@ -8,3 +8,11 @@
   --color-gray: #C3C3C3;
   --color-red: #D45353;
 }
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 20px;
+}
