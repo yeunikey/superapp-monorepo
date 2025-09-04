@@ -1,8 +1,9 @@
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 import { User } from "~/entities/student/types/user";
 import { cn } from "../module/merge";
 import { host } from "../api/instance";
+import { Image } from "expo-image";
 
 type AvatarProps = {
     user: User;
@@ -18,6 +19,7 @@ function Avatar({ user, className, textContainer }: AvatarProps) {
             <Image
                 source={{ uri: `${host}:4003/images/${user.imageId}` }}
                 className={cn('w-12 h-12 rounded-full', className)}
+                cachePolicy={"disk"}
             />
         );
     }

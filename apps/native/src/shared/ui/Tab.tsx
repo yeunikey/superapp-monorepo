@@ -26,7 +26,7 @@ function Tab({ children, title, className }: TabProps) {
                     </View>
                 </View>
 
-                <View className={cn("flex-1", className)}>
+                <View className={cn("flex-1 bg-background", className)}>
                     {children}
                 </View>
             </View>

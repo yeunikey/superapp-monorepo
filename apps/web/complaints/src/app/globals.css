@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #3D6390;
+  --color-background: #F3F5F7;
+  --color-secondary: #4a5565;
+  --color-dark: #242424;
+  --color-gray: #C3C3C3;
+  --color-red: #D45353;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 20px;
+}

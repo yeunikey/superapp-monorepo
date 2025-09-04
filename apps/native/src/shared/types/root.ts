@@ -16,8 +16,10 @@ type RootStackParamList = {
     AuthorsTab: StackParam;
     PolicyTab: StackParam;
     SettingsTab: StackParam;
+    NewTab: StackParam;
 
     MapService: StackParam;
+    ComplaintsService: StackParam;
 };
 
 export type {

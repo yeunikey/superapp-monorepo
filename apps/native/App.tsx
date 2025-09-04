@@ -1,4 +1,5 @@
 import './global.css';
+import "./src/shared/ui/nativewind-interop";
 
 import AuthPage from '~/app/auth/page';
 import AuthorsTab from '~/app/tabs/authors/tab';
@@ -14,6 +15,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SettingsTab from '~/app/tabs/settings/tab';
 import { StatusBar } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import NewTab from '~/app/tabs/new/tab';
+import ComplaintsService from '~/app/services/complaints/service';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -71,6 +74,14 @@ export default function App() {
           />
 
           <Stack.Screen
+            name="NewTab"
+            component={NewTab}
+            options={({ route }) => ({
+              animation: route.params.animation
+            })}
+          />
+
+          <Stack.Screen
             name="AuthorsTab"
             component={AuthorsTab}
             options={({ route }) => ({
@@ -99,6 +110,14 @@ export default function App() {
           <Stack.Screen
             name="MapService"
             component={MapService}
+            options={({ route }) => ({
+              animation: route.params.animation
+            })}
+          />
+
+          <Stack.Screen
+            name="ComplaintsService"
+            component={ComplaintsService}
             options={({ route }) => ({
               animation: route.params.animation
             })}

@@ -22,6 +22,7 @@ function AppList() {
                 <AppCard
                     title='Жалобы & идеи'
                     image={require('@assets/images/4089425 1.png')}
+                    tab='ComplaintsService'
                 />
                 <AppCard
                     title='Мероприятия'

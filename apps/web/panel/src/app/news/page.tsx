@@ -7,11 +7,15 @@ import { useNews } from "@/entities/news/model/useNews";
 import { useNewAddModal } from "@/features/news/model/useNewAddModal";
 import NewAddModal from "@/features/news/ui/NewAddModal";
 import { host } from "@/shared/api/instance";
+import NewEditModal from "@/features/news/ui/NewEditModal";
+import { useNewEditModal } from "@/features/news/model/useNewEditModal";
 
 export default function News() {
 
   const { news } = useNews();
-  const { setOpen } = useNewAddModal();
+
+  const { setOpen: setAddOpen } = useNewAddModal();
+  const { setOpen: setEditOpen, setEditingNew } = useNewEditModal();
 
   useEffect(() => {
     fetchNews()
@@ -22,6 +26,7 @@ export default function News() {
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.bubble.css" />
 
       <NewAddModal />
+      <NewEditModal />
 
       <div className="text-3xl font-semibold text-dark">
         Управление новостями
@@ -34,27 +39,32 @@ export default function News() {
           style={{
             border: "2px dashed"
           }}
-          onClick={() => setOpen(true)}
+          onClick={() => setAddOpen(true)}
         >
           +
         </div>
 
-        {news.map((newItem, i) => (
-          <div key={i} className="relative w-full aspect-[2] bg-background rounded-3xl flex items-end overflow-hidden">
-            {newItem.imageId && (
-              <img
-                className="absolute w-full h-full object-cover"
-                src={`${host}:4003/images/${newItem.imageId}`}
-                alt="preview"
-              />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        {news
+          .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+          .map((newItem, i) => (
+            <div key={i} className="relative w-full aspect-[2] bg-background rounded-3xl flex items-end overflow-hidden cursor-pointer" onClick={() => {
+              setEditOpen(true);
+              setEditingNew(newItem);
+            }}>
+              {newItem.imageId && (
+                <img
+                  className="absolute w-full h-full object-cover"
+                  src={`${host}:4003/images/${newItem.imageId}`}
+                  alt="preview"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
-            <div className="text-white px-4 py-4 font-semibold text-lg line-clamp-2 z-10">
-              {newItem.title || "Превью"}
+              <div className="text-white px-4 py-4 font-semibold text-lg line-clamp-2 z-10">
+                {newItem.title || "Превью"}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
 
       </div>
 
