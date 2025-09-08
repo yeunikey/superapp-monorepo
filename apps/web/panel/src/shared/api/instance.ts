@@ -5,25 +5,14 @@ export const defaultOptions: Record<string, string> = {
     'Accept': 'application/json'
 };
 
-
 export const host = `http://${process.env.NEXT_PUBLIC_HOST}`;
+export const baseURL = `http://${process.env.NEXT_PUBLIC_HOST}:1000/v1`;
 
-export const userApi = xior.create({
-    baseURL: `${host}:4001`,
-    headers: defaultOptions
-});
-
-
-export const authApi = xior.create({
-    baseURL: `${host}:4002`,
+export const api = xior.create({
+    baseURL: `${baseURL}`,
     headers: defaultOptions
 });
 
 export const imageApi = xior.create({
-    baseURL: `${host}:4003`,
-});
-
-export const newsApi = xior.create({
-    baseURL: `${host}:4004`,
-    headers: defaultOptions
+    baseURL: `${baseURL}/images`,
 });

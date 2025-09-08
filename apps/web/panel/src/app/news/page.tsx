@@ -1,14 +1,15 @@
 "use client";
 
-import View from "@/shared/ui/View";
-import { useEffect } from "react";
-import { fetchNews } from "@/features/news/model/newService";
-import { useNews } from "@/entities/news/model/useNews";
-import { useNewAddModal } from "@/features/news/model/useNewAddModal";
+import { baseURL, host } from "@/shared/api/instance";
+
 import NewAddModal from "@/features/news/ui/NewAddModal";
-import { host } from "@/shared/api/instance";
 import NewEditModal from "@/features/news/ui/NewEditModal";
+import View from "@/shared/ui/View";
+import { fetchNews } from "@/features/news/model/newService";
+import { useEffect } from "react";
+import { useNewAddModal } from "@/features/news/model/useNewAddModal";
 import { useNewEditModal } from "@/features/news/model/useNewEditModal";
+import { useNews } from "@/entities/news/model/useNews";
 
 export default function News() {
 
@@ -54,7 +55,7 @@ export default function News() {
               {newItem.imageId && (
                 <img
                   className="absolute w-full h-full object-cover"
-                  src={`${host}:4003/images/${newItem.imageId}`}
+                  src={`${baseURL}/images/${newItem.imageId}`}
                   alt="preview"
                 />
               )}

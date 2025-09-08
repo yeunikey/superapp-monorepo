@@ -1,9 +1,9 @@
 import { Text, View } from "react-native";
 
-import { User } from "~/entities/student/types/user";
-import { cn } from "../module/merge";
-import { host } from "../api/instance";
 import { Image } from "expo-image";
+import { User } from "~/entities/student/types/user";
+import { baseURL } from "../api/instance";
+import { cn } from "../module/merge";
 
 type AvatarProps = {
     user: User;
@@ -17,7 +17,7 @@ function Avatar({ user, className, textContainer }: AvatarProps) {
     if (hasImage) {
         return (
             <Image
-                source={{ uri: `${host}:4003/images/${user.imageId}` }}
+                source={{ uri: `${baseURL}/images/${user.imageId}` }}
                 className={cn('w-12 h-12 rounded-full', className)}
                 cachePolicy={"disk"}
             />

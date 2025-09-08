@@ -12,7 +12,6 @@ export class User {
     @Column()
     barcode: string;
 
-
     @Column()
     name: string;
 

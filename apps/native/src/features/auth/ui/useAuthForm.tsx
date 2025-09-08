@@ -1,11 +1,12 @@
-import { Alert, TextInput } from "react-native";
-import { useState, useRef } from "react";
 import * as SecureStore from 'expo-secure-store';
 
+import { Alert, TextInput } from "react-native";
+import { useRef, useState } from "react";
+
+import { ApiResponse } from "~/types";
+import { User } from "~/entities/student/types/user";
 import { api } from "~/shared/api/instance";
 import { useAuth } from "~/entities/student/model/useAuth";
-import { User } from "~/entities/student/types/user";
-import { ApiResponse } from "~/types";
 import { useNavigationTabs } from "~/shared/lib/useNavigationTabs";
 
 export function useAuthForm() {
@@ -42,7 +43,7 @@ export function useAuthForm() {
             if (type === 'login') {
                 if (!barcode) return Alert.alert("Ошибка", "Введите баркод");
 
-                const res = await api.post<ApiResponse<unknown>>('/code', { barcode });
+                const res = await api.post<ApiResponse<unknown>>('auth/code', { barcode });
                 setType('code');
 
                 if (res.data.statusCode !== 200) {
@@ -51,7 +52,7 @@ export function useAuthForm() {
 
             } else {
                 const enteredCode = code.join('');
-                const res = await api.post<ApiResponse<{ token: string, user: User }>>('/confirm', {
+                const res = await api.post<ApiResponse<{ token: string, user: User }>>('auth/confirm', {
                     barcode,
                     code: enteredCode,
                 });

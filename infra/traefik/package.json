@@ -1,0 +1,7 @@
+{
+    "name": "infra-traefik",
+    "private": true,
+    "scripts": {
+        "dev": "traefik --configFile=traefik.yml"
+    }
+}

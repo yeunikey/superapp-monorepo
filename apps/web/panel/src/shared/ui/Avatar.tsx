@@ -1,4 +1,5 @@
 import { User } from "@/entities/data/types/user";
+import { baseURL } from "../api/instance";
 import { cn } from "../lib/merge";
 
 type AvatarType = {
@@ -12,7 +13,7 @@ function Avatar({ user, className }: AvatarType) {
             {user?.imageId ? (
                 <img
                     className={cn("rounded-full w-10 h-10 bg-secondary", className)}
-                    src={`http://${process.env.NEXT_PUBLIC_HOST}:4003/images/${user.imageId}`}
+                    src={`${baseURL}/images/${user.imageId}`}
                     alt={`${user.name} ${user.surname}`}
                 />
             ) : (

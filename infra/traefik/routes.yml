@@ -1,0 +1,64 @@
+http:
+
+  routers:
+    data:
+      rule: "PathPrefix(`/v1/data`)"
+      service: data-service
+      entryPoints: [web]
+      middlewares: [strip-v1]
+
+    auth:
+      rule: "PathPrefix(`/v1/auth`)"
+      service: auth-service
+      entryPoints: [web]
+      middlewares: [strip-v1]
+
+    image:
+      rule: "PathPrefix(`/v1/image`)"
+      service: image-service
+      entryPoints: [web]
+      middlewares: [strip-v1]
+
+    news:
+      rule: "PathPrefix(`/v1/news`)"
+      service: news-service
+      entryPoints: [web]
+      middlewares: [strip-v1]
+
+    complaints:
+      rule: "PathPrefix(`/v1/complaints`)"
+      service: complaints-service
+      entryPoints: [web]
+      middlewares: [strip-v1]
+
+  middlewares:
+    strip-v1:
+      stripPrefixRegex:
+        regex:
+          - "^/v1/[^/]+"
+
+  services:
+    data-service:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:4001"
+
+    auth-service:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:4002"
+
+    image-service:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:4003"
+
+    news-service:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:4004"
+
+    complaints-service:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:4005"

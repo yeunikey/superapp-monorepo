@@ -1,15 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { userApi } from "@/shared/api/instance";
-
 import { ApiResponse } from "@/types";
 import Modal from "@/shared/ui/Modal";
 import { User } from "@/entities/data/types/user";
+import { api } from "@/shared/api/instance";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
 import { useGroups } from "@/entities/data/model/useGroups";
 import { useGroupsStore } from "../../users/model/useGroupsStore";
+import { useState } from "react";
 
 function GroupAddModal() {
     const { addModal, setAddModal } = useGroupsStore();
@@ -31,7 +30,7 @@ function GroupAddModal() {
                 name: string;
             } = { name };
 
-            await userApi.post<ApiResponse<User>>("/groups/new", payload, {
+            await api.post<ApiResponse<User>>("data/groups/new", payload, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

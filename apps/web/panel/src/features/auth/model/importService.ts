@@ -2,7 +2,7 @@ import { ApiResponse } from "@/types";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Cookies from 'js-cookie';
 import { User } from "@/entities/data/types/user";
-import { authApi } from "@/shared/api/instance";
+import { api } from "@/shared/api/instance";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
 import { useAuthStore } from "./useAuthStore";
@@ -36,7 +36,7 @@ const handleSubmit = async (router: AppRouterInstance) => {
 
         setFetching(true);
 
-        await authApi.post<ApiResponse>("/code", payload)
+        await api.post<ApiResponse>("auth/code", payload)
             .then(({ data: response }) => {
 
                 if (response.statusCode == 200) {
@@ -58,7 +58,7 @@ const handleSubmit = async (router: AppRouterInstance) => {
 
         setFetching(true);
 
-        await authApi.post<ApiResponse<{ token: string, user: User }>>("/confirm", payload)
+        await api.post<ApiResponse<{ token: string, user: User }>>("auth/confirm", payload)
             .then(({ data: response }) => {
 
                 if (response.statusCode == 200) {

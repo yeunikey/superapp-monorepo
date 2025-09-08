@@ -1,21 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import 'react-quill-new/dist/quill.snow.css';
+
+import { api, host } from "@/shared/api/instance";
+
+import { ApiResponse } from "@/types";
 import Modal from "@/shared/ui/Modal";
+import { New } from "@/entities/news/types/news";
+import dynamic from "next/dynamic";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
 import { useNewAddModal } from "../model/useNewAddModal";
-import { ApiResponse } from "@/types";
+import { useNews } from "@/entities/news/model/useNews";
+import { useState } from "react";
 import xior from "xior";
-import { host, newsApi } from "@/shared/api/instance";
 
-import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill-new"), {
     ssr: false,
 });
-import 'react-quill-new/dist/quill.snow.css';
-import { New } from "@/entities/news/types/news";
-import { useNews } from "@/entities/news/model/useNews";
 
 function NewAddModal() {
     const { token } = useAuth();
@@ -34,7 +36,6 @@ function NewAddModal() {
 
         let uploadedImageId = imageId;
 
-        // Загружаем файл только при создании
         if (selectedFile) {
             try {
                 const formData = new FormData();
@@ -57,7 +58,7 @@ function NewAddModal() {
         try {
             const payload = { title, content, imageId: uploadedImageId };
 
-            await newsApi.post<ApiResponse<New>>("/news", payload, {
+            await api.post<ApiResponse<New>>("news", payload, {
                 headers: { Authorization: `Bearer ${token}` },
             }).then(({ data }) => {
 

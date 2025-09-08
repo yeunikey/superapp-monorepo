@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { userApi } from "@/shared/api/instance";
 
 import { ApiResponse } from "@/types";
-import Modal from "@/shared/ui/Modal";
 import { Group } from "@/entities/data/types/group"; // 👈 сделай тип группы
+import Modal from "@/shared/ui/Modal";
+import { api } from "@/shared/api/instance";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
+import { useGroupEditModal } from "@/features/groups/model/useGroupEditModal";
 import { useGroups } from "@/entities/data/model/useGroups";
 import { useGroupsStore } from "../../users/model/useGroupsStore";
-import { useGroupEditModal } from "@/features/groups/model/useGroupEditModal";
 
 function GroupEditModal() {
     const { editModal, setEditModal } = useGroupsStore();
@@ -30,9 +30,9 @@ function GroupEditModal() {
         try {
             const payload: { id?: number; name: string } = { id: group?.id, name };
 
-            const url = group?.id ? "/groups/edit" : "/groups/new";
+            const url = group?.id ? "data/groups/edit" : "data/groups/new";
 
-            await userApi.post<ApiResponse<Group>>(url, payload, {
+            await api.post<ApiResponse<Group>>(url, payload, {
                 headers: { Authorization: `Bearer ${token}` },
             }).then(({ data }) => {
                 if (data.statusCode !== 200) {
@@ -63,7 +63,7 @@ function GroupEditModal() {
         if (!group?.id) return;
 
         try {
-            await userApi.delete<ApiResponse>(`/groups/${group.name}`, {
+            await api.delete<ApiResponse>(`data/groups/${group.name}`, {
                 headers: { Authorization: `Bearer ${token}` },
             }).then(({ data }) => {
                 if (data.statusCode !== 200) {

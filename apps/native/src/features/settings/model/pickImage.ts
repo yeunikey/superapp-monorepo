@@ -1,10 +1,12 @@
-import xior from "xior";
-import { getMimeType } from "./mime-type";
 import * as ImagePicker from "expo-image-picker";
+
+import { host, imageApi } from "~/shared/api/instance";
+
 import { Alert } from "react-native";
+import { getMimeType } from "./mime-type";
 import { useAuth } from "~/entities/student/model/useAuth";
 import { useImageLoader } from "./imageLoader";
-import { host } from "~/shared/api/instance";
+import xior from "xior";
 
 const pickImage = async () => {
     const { loggedUser, token, setLoggedUser } = useAuth.getState();
@@ -37,7 +39,7 @@ const pickImage = async () => {
         try {
             setLoading(true);
 
-            const uploadRes = await xior.post(`${host}:4003/images/upload`, formData, {
+            const uploadRes = await imageApi.post(`upload`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

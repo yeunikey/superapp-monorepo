@@ -5,7 +5,7 @@ import { ReactNode, useEffect } from 'react';
 import { ApiResponse } from '@/types';
 import Cookies from 'js-cookie'
 import { User } from '@/entities/data/types/user';
-import { authApi } from '@/shared/api/instance';
+import { api } from '@/shared/api/instance';
 import { useAuth } from "@/entities/data/model/useAuth";
 
 type AuthProps = {
@@ -18,7 +18,7 @@ function Authorize({ children }: AuthProps) {
 
     const fetchData = async (token: string) => {
 
-        await authApi.get<ApiResponse<User>>('/profile', {
+        await api.get<ApiResponse<User>>('auth/profile', {
             headers: {
                 Authorization: "Bearer " + token
             }

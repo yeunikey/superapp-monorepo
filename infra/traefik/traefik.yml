@@ -1,0 +1,19 @@
+entryPoints:
+  web:
+    address: ":1000"
+
+providers:
+  file:
+    filename: "routes.yml"
+
+api:
+  dashboard: true
+  insecure: true
+
+# Логи Traefik (в консоль)
+log:
+  level: DEBUG    # ERROR, WARN, INFO, DEBUG
+  format: common  # или json
+
+# Логи HTTP-запросов (access logs) в консоль
+accessLog: {}

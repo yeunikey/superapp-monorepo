@@ -1,14 +1,14 @@
-import { useEffect, useRef } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { Animated } from 'react-native';
 
+import { useEffect, useRef } from 'react';
+
+import { Animated } from 'react-native';
+import { ApiResponse } from '~/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '~/shared/types/root';
-
-import { api } from '~/shared/api/instance';
-import { ApiResponse } from '~/types';
-import { useAuth } from '~/entities/student/model/useAuth';
 import { User } from '~/entities/student/types/user';
+import { api } from '~/shared/api/instance';
+import { useAuth } from '~/entities/student/model/useAuth';
 
 type LoaderAnimationProps = {
     navigation: NativeStackNavigationProp<RootStackParamList>;
@@ -40,7 +40,7 @@ export function useLoaderAnimation({ navigation }: LoaderAnimationProps) {
             try {
                 const token = await SecureStore.getItemAsync('token');
 
-                const res = await api.get<ApiResponse<User>>('/profile', {
+                const res = await api.get<ApiResponse<User>>('auth/profile', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

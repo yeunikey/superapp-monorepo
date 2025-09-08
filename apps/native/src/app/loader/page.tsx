@@ -1,10 +1,10 @@
-
 import { Image, Text, View } from "react-native";
 
 import { APP_VERSION } from "~/shared/config/constants";
 import LoaderProgress from "~/features/loader/ui/LoaderProgress";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "~/shared/types/root";
+import { fetchNews } from "~/widgets/news/model/newService";
 import { preloadAssets } from "~/shared/module/images";
 import { useEffect } from "react";
 import { useLoaderAnimation } from "~/features/loader/model/useLoaderAnimation";
@@ -16,6 +16,7 @@ function LoaderPage({ navigation }: Props) {
 
     useEffect(() => {
         preloadAssets();
+        fetchNews();
     }, [])
 
     return (

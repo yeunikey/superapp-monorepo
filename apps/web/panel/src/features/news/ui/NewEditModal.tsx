@@ -1,22 +1,23 @@
 "use client";
 
+import "react-quill-new/dist/quill.snow.css";
+
+import { api, baseURL, host } from "@/shared/api/instance";
 import { useEffect, useState } from "react";
+
+import { ApiResponse } from "@/types";
 import Modal from "@/shared/ui/Modal";
+import { New } from "@/entities/news/types/news";
+import dynamic from "next/dynamic";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
-import { ApiResponse } from "@/types";
+import { useNewEditModal } from "../model/useNewEditModal";
+import { useNews } from "@/entities/news/model/useNews";
 import xior from "xior";
-import { host, newsApi } from "@/shared/api/instance";
 
-import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill-new"), {
     ssr: false,
 });
-
-import "react-quill-new/dist/quill.snow.css";
-import { New } from "@/entities/news/types/news";
-import { useNews } from "@/entities/news/model/useNews";
-import { useNewEditModal } from "../model/useNewEditModal";
 
 function NewEditModal() {
     const { token } = useAuth();
@@ -61,7 +62,7 @@ function NewEditModal() {
                 formData.append("file", selectedFile);
 
                 const uploadRes = await xior.post<ApiResponse<{ id: string }>>(
-                    `${host}:4003/images/upload`,
+                    `${baseURL}/images/upload`,
                     formData,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -79,8 +80,8 @@ function NewEditModal() {
 
             const payload = { title, content, imageId: uploadedImageId };
 
-            await newsApi
-                .post<ApiResponse<New>>(`/news/${editingNew.id}`, payload, {
+            await api
+                .post<ApiResponse<New>>(`news/${editingNew.id}`, payload, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
                 .then(({ data }) => {
@@ -107,8 +108,8 @@ function NewEditModal() {
         if (!confirm("Вы уверены, что хотите удалить эту новость?")) return;
 
         try {
-            await newsApi.delete<ApiResponse<null>>(
-                `/news/${editingNew.id}`,
+            await api.delete<ApiResponse<null>>(
+                `news/${editingNew.id}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
@@ -151,7 +152,7 @@ function NewEditModal() {
                                         src={
                                             selectedFile
                                                 ? URL.createObjectURL(selectedFile)
-                                                : `${host}:4003/images/${imageId}`
+                                                : `${baseURL}/images/${imageId}`
                                         }
                                         alt="preview"
                                     />

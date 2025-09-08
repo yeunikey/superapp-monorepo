@@ -15,14 +15,14 @@ import { AuthGuard } from 'src/guard/auth.guard';
 import { UserClient } from 'src/users/user.client';
 import { CreateNewsDto } from './dto/create-new.dto';
 
-@Controller('news')
+@Controller('/')
 export class NewController {
     constructor(
         private readonly newService: NewService,
         private readonly userClient: UserClient,
     ) { }
 
-    @Get('/all')
+    @Get('/')
     async getAll() {
 
         return {

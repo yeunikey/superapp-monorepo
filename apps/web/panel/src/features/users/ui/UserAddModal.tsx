@@ -1,16 +1,16 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
-import { host, userApi } from "@/shared/api/instance";
+import { api, host } from "@/shared/api/instance";
 
 import { ApiResponse } from "@/types";
 import Modal from "@/shared/ui/Modal";
 import { User } from "@/entities/data/types/user";
 import { fetchGroups } from "../model/usersService";
 import { toast } from "react-toastify";
-import { useUserAddModal } from "../model/modal/useUserAddModal";
 import { useAuth } from "@/entities/data/model/useAuth";
 import { useGroups } from "@/entities/data/model/useGroups";
+import { useUserAddModal } from "../model/modal/useUserAddModal";
 import { useUsers } from "@/entities/data/model/useUsers";
 import { useUsersStore } from "../model/useUsersStore";
 import xior from "xior";
@@ -102,7 +102,7 @@ function UserAddModal() {
                 payload.imageId = imageId;
             }
 
-            await userApi.post<ApiResponse<User>>("/users/new", payload, {
+            await api.post<ApiResponse<User>>("data/users/new", payload, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

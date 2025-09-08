@@ -1,13 +1,13 @@
-import { useNews } from "~/entities/news/model/useNews";
-import { New } from "~/entities/news/types/new";
-import { newsApi } from "~/shared/api/instance";
 import { ApiResponse } from "~/types";
+import { New } from "~/entities/news/types/new";
+import { api } from "~/shared/api/instance";
+import { useNews } from "~/entities/news/model/useNews";
 
 const fetchNews = async () => {
 
     const { setNews } = useNews.getState();
 
-    await newsApi.get<ApiResponse<New[]>>('/news/all')
+    await api.get<ApiResponse<New[]>>('news')
         .then(({ data }) => {
             if (data.statusCode != 200) {
                 return;

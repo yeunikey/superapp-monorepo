@@ -1,11 +1,12 @@
-import Tab from "~/shared/ui/Tab";
-import { ScrollView, View, Text, ImageBackground } from "react-native";
-import { useNews } from "~/entities/news/model/useNews";
-import { cn } from "~/shared/module/merge";
-import { host } from "~/shared/api/instance";
+import { ImageBackground, ScrollView, Text, View } from "react-native";
+
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import RenderHTML from "react-native-render-html";
-import { Image } from "expo-image";
+import Tab from "~/shared/ui/Tab";
+import { cn } from "~/shared/module/merge";
+import { host } from "~/shared/api/instance";
+import { useNews } from "~/entities/news/model/useNews";
 
 function NewTab() {
 
@@ -59,7 +60,7 @@ function NewTab() {
                             }}
                         />
 
-                        <View className="absolute bottom-3 left-6 right-6">
+                        <View className="absolute bottom-6 left-6 right-6">
                             <Text className="text-white text-4xl font-semibold">{view.title}</Text>
                         </View>
 

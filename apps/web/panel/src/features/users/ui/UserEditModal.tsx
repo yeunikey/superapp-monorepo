@@ -2,7 +2,7 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
-import { host, userApi } from "@/shared/api/instance";
+import { api, baseURL, host, imageApi } from "@/shared/api/instance";
 
 import { ApiResponse } from "@/types";
 import Modal from "@/shared/ui/Modal";
@@ -10,8 +10,8 @@ import { User } from "@/entities/data/types/user";
 import { fetchGroups } from "../model/usersService";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
-import { useUserEditModal } from "../model/modal/useUserEditModal";
 import { useGroups } from "@/entities/data/model/useGroups";
+import { useUserEditModal } from "../model/modal/useUserEditModal";
 import { useUsers } from "@/entities/data/model/useUsers";
 import { useUsersStore } from "../model/useUsersStore";
 import xior from "xior";
@@ -84,8 +84,8 @@ function UserEditModal() {
                 const formData = new FormData();
                 formData.append("file", image);
 
-                const uploadRes = await xior.post<ApiResponse<{ id: string }>>(
-                    `${host}:4003/images/upload`,
+                const uploadRes = await imageApi.post<ApiResponse<{ id: string }>>(
+                    `upload`,
                     formData,
                     {
                         headers: { Authorization: `Bearer ${token}` },
@@ -120,8 +120,8 @@ function UserEditModal() {
                 payload.imageId = imageId;
             }
 
-            const { data } = await userApi.post<ApiResponse<User>>(
-                "/users/edit",
+            const { data } = await api.post<ApiResponse<User>>(
+                "data/users/edit",
                 payload,
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -162,7 +162,7 @@ function UserEditModal() {
             setExistingImageId(user.imageId ?? null); // 👈 сохраняем старую картинку
 
             if (user.imageId) {
-                setPreview(`${host}:4003/images/${user.imageId}`);
+                setPreview(`${baseURL}/images/${user.imageId}`);
             }
         } else if (!editModal) {
             resetForm();
@@ -181,8 +181,8 @@ function UserEditModal() {
         }
 
         try {
-            const { data } = await userApi.delete<ApiResponse>(
-                `/users/${user.barcode}`,
+            const { data } = await api.delete<ApiResponse>(
+                `data/users/${user.barcode}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
