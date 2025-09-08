@@ -11,7 +11,7 @@ type GroupState = {
     setEditModal: (editModal: boolean) => void;
 };
 
-export const useGroupsStore = create<GroupState>((set) => ({
+export const useGroupStore = create<GroupState>((set) => ({
     searchText: "",
     setSearchText: (searchText: string) => set({ searchText }),
 

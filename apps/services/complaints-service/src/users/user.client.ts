@@ -1,4 +1,4 @@
-import { Client, ClientGrpc } from '@nestjs/microservices';
+import { Client, ClientGrpc, ClientProxyFactory } from '@nestjs/microservices';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 
 import { Metadata } from '@grpc/grpc-js';
@@ -11,20 +11,24 @@ import { join } from 'path';
 @Injectable()
 export class UserClient implements OnModuleInit {
 
-    @Client({
-        transport: Transport.GRPC,
-        options: {
-            package: 'users',
-            protoPath: join(__dirname, './../../../../libs/proto/users.proto'),
-            url: `${process.env.HOST}:5001`,
-        },
-    })
-    private readonly client: ClientGrpc;
-
+    private client: ClientGrpc;
     private userService: UserServiceGrpc;
 
     onModuleInit() {
+        const host = process.env.HOST || 'localhost';
+        const url = `${host}:5001`;
+
+        this.client = ClientProxyFactory.create({
+            transport: Transport.GRPC,
+            options: {
+                package: 'users',
+                protoPath: join(__dirname, './../../../../libs/proto/users.proto'),
+                url,
+            },
+        }) as ClientGrpc;
+
         this.userService = this.client.getService<UserServiceGrpc>('UserService');
+        console.log(`✅ gRPC client connected to: ${url}`);
     }
 
     getMetadata() {

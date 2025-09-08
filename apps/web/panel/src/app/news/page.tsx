@@ -5,7 +5,7 @@ import { baseURL, host } from "@/shared/api/instance";
 import NewAddModal from "@/features/news/ui/NewAddModal";
 import NewEditModal from "@/features/news/ui/NewEditModal";
 import View from "@/shared/ui/View";
-import { fetchNews } from "@/features/news/model/newService";
+import { fetchNews } from "@/entities/news/model/newService";
 import { useEffect } from "react";
 import { useNewAddModal } from "@/features/news/model/useNewAddModal";
 import { useNewEditModal } from "@/features/news/model/useNewEditModal";

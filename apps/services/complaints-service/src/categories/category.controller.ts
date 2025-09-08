@@ -20,7 +20,6 @@ import { DeepPartial } from 'typeorm';
 import { UserClient } from 'src/users/user.client';
 
 @Controller('categories')
-@UseGuards(AuthGuard)
 export class CategoryController {
 
     constructor(
@@ -41,6 +40,7 @@ export class CategoryController {
     }
 
     @Post()
+    @UseGuards(AuthGuard)
     async saveCategory(
         @Body() category: DeepPartial<Category>,
         @Req() { user: { barcode } }: AuthRequest
@@ -55,14 +55,16 @@ export class CategoryController {
             };
         }
 
-        await this.categoryService.save(category);
+        const saved = await this.categoryService.save(category);
 
         return {
             statusCode: HttpStatus.OK,
+            data: saved
         };
     }
 
     @Post('/edit')
+    @UseGuards(AuthGuard)
     async editCategory(
         @Body() category: DeepPartial<Category>,
         @Req() { user: { barcode } }: AuthRequest
@@ -81,6 +83,7 @@ export class CategoryController {
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard)
     async deleteCategory(
         @Param('id') id: number,
         @Req() { user: { barcode } }: AuthRequest

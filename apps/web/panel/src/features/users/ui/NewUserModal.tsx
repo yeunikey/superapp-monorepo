@@ -10,12 +10,12 @@ import { fetchGroups } from "../model/usersService";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
 import { useGroups } from "@/entities/data/model/useGroups";
-import { useUserAddModal } from "../model/modal/useUserAddModal";
+import { useNewUserModal } from "../model/modal/useNewUserModal";
 import { useUsers } from "@/entities/data/model/useUsers";
 import { useUsersStore } from "../model/useUsersStore";
 import xior from "xior";
 
-function UserAddModal() {
+function NewUserModal() {
     const { addModal, setAddModal } = useUsersStore();
     const { token } = useAuth();
 
@@ -25,7 +25,7 @@ function UserAddModal() {
         surname, setSurname,
         group, setGroup,
         resetForm
-    } = useUserAddModal();
+    } = useNewUserModal();
 
     const { groups } = useGroups();
     const { users, setUsers } = useUsers();
@@ -222,4 +222,4 @@ function UserAddModal() {
     );
 }
 
-export default UserAddModal;
+export default NewUserModal;

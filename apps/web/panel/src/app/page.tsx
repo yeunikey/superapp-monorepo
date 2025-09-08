@@ -1,8 +1,8 @@
 "use client";;
 
-import UserAddModal from "@/features/users/ui/UserAddModal";
-import Controls from "@/widgets/users/Controls";
-import UserEditModal from "@/features/users/ui/UserEditModal";
+import NewUserModal from "@/features/users/ui/NewUserModal";
+import UserControls from "@/widgets/users/UserControls";
+import EditUserModal from "@/features/users/ui/EditUserModal";
 import UsersTable from "@/widgets/users/UsersTable";
 import View from "@/shared/ui/View";
 import { fetchUsers } from "@/features/users/model/usersService";
@@ -21,8 +21,8 @@ export default function Users() {
     <View>
 
       {/* Modals */}
-      <UserAddModal />
-      <UserEditModal />
+      <NewUserModal />
+      <EditUserModal />
 
       {/* Content */}
 
@@ -30,7 +30,7 @@ export default function Users() {
         Управление пользователями
       </div>
 
-      <Controls />
+      <UserControls />
       <UsersTable />
 
     </View>

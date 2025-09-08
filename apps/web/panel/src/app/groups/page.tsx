@@ -1,14 +1,14 @@
 "use client";;
 
-import GroupAddModal from "@/features/groups/ui/GroupAddModal";
-import UserEditModal from "@/features/users/ui/UserEditModal";
+import NewGroupModal from "@/features/groups/ui/NewGroupModal";
+import EditUserModal from "@/features/users/ui/EditUserModal";
 import View from "@/shared/ui/View";
 import { useAuth } from "@/entities/data/model/useAuth";
 import { useEffect } from "react";
-import Controls from "@/widgets/groups/Controls";
+import GroupControls from "@/widgets/groups/GroupControls";
 import GroupsTable from "@/widgets/groups/GroupsTable";
 import { fetchGroups } from "@/features/users/model/usersService";
-import GroupEditModal from "@/features/groups/ui/GroupEditModal";
+import EditGroupModal from "@/features/groups/ui/EditGroupModal";
 
 export default function Groups() {
 
@@ -22,15 +22,15 @@ export default function Groups() {
     <View>
 
       {/* Modals */}
-      <GroupAddModal />
-      <GroupEditModal />
+      <NewGroupModal />
+      <EditGroupModal />
 
       {/* Content */}
       <div className="text-3xl font-semibold text-dark">
         Управление группами
       </div>
 
-      <Controls />
+      <GroupControls />
       <GroupsTable />
 
     </View>

@@ -1,8 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Complaint } from 'src/complaints/entities/complaint.entity';
 
-@Entity()
+@Entity("categories")
 export class Category {
 
     @PrimaryGeneratedColumn()
@@ -14,7 +13,7 @@ export class Category {
     @Column()
     content: string;
 
-    @OneToMany(() => Complaint, (complaint) => complaint.category)
-    complaints: Complaint[];
+    // @OneToMany(() => Complaint, (complaint) => complaint.category)
+    // complaints: Complaint[];
 
 }

@@ -1,19 +1,19 @@
 import { toast } from "react-toastify";
-import { useGroupsStore } from "@/features/users/model/useGroupsStore";
+import { useUsersStore } from "@/features/users/model/useUsersStore";
 
-function Controls() {
+function UserControls() {
 
     const {
         searchText, setSearchText,
         setAddModal
-    } = useGroupsStore();
+    } = useUsersStore();
 
     return (
         <div className="mt-6 flex gap-6">
             <div className="flex items-center bg-white py-2 px-4 rounded-4xl focus-within:outline-2 outline-primary w-80">
                 <input
                     type="text"
-                    placeholder="Поиск по названию..."
+                    placeholder="Поиск по ФИО, баркоду и группе..."
                     className="outline-none text-dark bg-transparent w-full"
 
                     value={searchText}
@@ -38,4 +38,4 @@ function Controls() {
     );
 }
 
-export default Controls;
+export default UserControls;

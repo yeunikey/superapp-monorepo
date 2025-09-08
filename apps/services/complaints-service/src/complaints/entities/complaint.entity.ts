@@ -1,6 +1,5 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Category } from 'src/categories/entities/category.entity';
 import { ComplaintStatus } from './status.enum';
 
 @Entity()
@@ -9,8 +8,8 @@ export class Complaint {
     @PrimaryGeneratedColumn('uuid')
     uniqueId: string;
 
-    @ManyToOne(() => Category, (category) => category.complaints, { eager: true })
-    category: Category;
+    // @ManyToOne(() => Category, (category) => category.complaints, { eager: true, nullable: true })
+    // category: Category;
 
     @Column({
         type: "enum",

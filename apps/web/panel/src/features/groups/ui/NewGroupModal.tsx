@@ -7,11 +7,11 @@ import { api } from "@/shared/api/instance";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
 import { useGroups } from "@/entities/data/model/useGroups";
-import { useGroupsStore } from "../../users/model/useGroupsStore";
+import { useGroupStore } from "../../users/model/useGroupStore";
 import { useState } from "react";
 
-function GroupAddModal() {
-    const { addModal, setAddModal } = useGroupsStore();
+function NewGroupModal() {
+    const { addModal, setAddModal } = useGroupStore();
     const { token } = useAuth();
 
     const { groups, setGroups } = useGroups();
@@ -19,6 +19,7 @@ function GroupAddModal() {
     const [name, setName] = useState<string>('');
 
     const handleSubmit = async () => {
+        
         if (!name) {
             toast.error("Пожалуйста, заполните все поля");
             return;
@@ -86,4 +87,4 @@ function GroupAddModal() {
     );
 }
 
-export default GroupAddModal;
+export default NewGroupModal;

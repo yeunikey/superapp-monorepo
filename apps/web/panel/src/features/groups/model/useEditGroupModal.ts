@@ -7,7 +7,7 @@ type UsersStore = {
     setGroup: (group: Group | null) => void;
 };
 
-export const useGroupEditModal = create<UsersStore>((set) => ({
+export const useEditGroupModal = create<UsersStore>((set) => ({
 
     group: null,
     setGroup: (group) => set({ group }),

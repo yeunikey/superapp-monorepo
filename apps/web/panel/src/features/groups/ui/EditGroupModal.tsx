@@ -8,16 +8,16 @@ import Modal from "@/shared/ui/Modal";
 import { api } from "@/shared/api/instance";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
-import { useGroupEditModal } from "@/features/groups/model/useGroupEditModal";
+import { useEditGroupModal } from "@/features/groups/model/useEditGroupModal";
 import { useGroups } from "@/entities/data/model/useGroups";
-import { useGroupsStore } from "../../users/model/useGroupsStore";
+import { useGroupStore } from "../../users/model/useGroupStore";
 
-function GroupEditModal() {
-    const { editModal, setEditModal } = useGroupsStore();
+function EditGroupModal() {
+    const { editModal, setEditModal } = useGroupStore();
     const { token } = useAuth();
 
     const { groups, setGroups } = useGroups();
-    const { group } = useGroupEditModal();
+    const { group } = useEditGroupModal();
 
     const [name, setName] = useState<string>("");
 
@@ -128,6 +128,6 @@ function GroupEditModal() {
     );
 }
 
-export default GroupEditModal;
+export default EditGroupModal;
 
 

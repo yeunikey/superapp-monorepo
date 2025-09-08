@@ -2,7 +2,7 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
-import { api, baseURL, host, imageApi } from "@/shared/api/instance";
+import { api, baseURL, imageApi } from "@/shared/api/instance";
 
 import { ApiResponse } from "@/types";
 import Modal from "@/shared/ui/Modal";
@@ -11,12 +11,11 @@ import { fetchGroups } from "../model/usersService";
 import { toast } from "react-toastify";
 import { useAuth } from "@/entities/data/model/useAuth";
 import { useGroups } from "@/entities/data/model/useGroups";
-import { useUserEditModal } from "../model/modal/useUserEditModal";
+import { useEditUserModal } from "../model/modal/useEditUserModal";
 import { useUsers } from "@/entities/data/model/useUsers";
 import { useUsersStore } from "../model/useUsersStore";
-import xior from "xior";
 
-function UserEditModal() {
+function EditUserModal() {
     const { editModal, setEditModal } = useUsersStore();
     const { token } = useAuth();
 
@@ -31,7 +30,7 @@ function UserEditModal() {
         setGroup,
         resetForm,
         user,
-    } = useUserEditModal();
+    } = useEditUserModal();
 
     const { groups } = useGroups();
     const { users, setUsers } = useUsers();
@@ -323,4 +322,4 @@ function UserEditModal() {
     );
 }
 
-export default UserEditModal;
+export default EditUserModal;

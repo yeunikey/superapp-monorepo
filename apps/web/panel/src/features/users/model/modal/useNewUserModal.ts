@@ -16,7 +16,7 @@ type UsersStore = {
     resetForm: () => void;
 };
 
-export const useUserAddModal = create<UsersStore>((set) => ({
+export const useNewUserModal = create<UsersStore>((set) => ({
 
     barcode: "",
     setBarcode: (value) => set({ barcode: value }),
