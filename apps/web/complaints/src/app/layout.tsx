@@ -4,6 +4,7 @@ import Authorize from "@/features/auth/ui/Authorize";
 import { Golos_Text } from "next/font/google";
 import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
+import Authorization from "@/features/auth/ui/Authorization";
 
 const golos = Golos_Text({
   variable: "--font-golos",
@@ -28,11 +29,11 @@ export default function RootLayout({
 
         <ToastContainer closeButton hideProgressBar position="bottom-right" stacked autoClose={3000} />
 
-        <Authorize>
+        <Authorization>
           <div className="flex flex-col h-full">
             {children}
           </div>
-        </Authorize>
+        </Authorization>
 
       </body>
     </html>

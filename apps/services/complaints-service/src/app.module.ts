@@ -4,6 +4,8 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './categories/entities/category.entity';
+import { ComplaintModule } from './complaints/complaint.module';
+import { Complaint } from './complaints/entities/complaint.entity';
 
 @Module({
   imports: [
@@ -22,11 +24,13 @@ import { Category } from './categories/entities/category.entity';
       username: 'postgres',
       password: '1234',
       database: 'superapp',
-      entities: [Category],
+      entities: [Category, Complaint],
       synchronize: true,
     }),
 
-    CategoryModule
+    CategoryModule,
+    ComplaintModule
+
   ],
   controllers: [],
   providers: [

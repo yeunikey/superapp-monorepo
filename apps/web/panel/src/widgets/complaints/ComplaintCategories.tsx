@@ -6,7 +6,7 @@ import { useEffect } from "react";
 function ComplaintCategories() {
 
     const { categories } = useComplaints();
-    const { setOpenAddModal } = useComplaintStore();
+    const { setOpenAddModal, setEditingCategory, setOpenEditModal } = useComplaintStore();
 
     useEffect(() => {
         fetchCategories();
@@ -27,14 +27,16 @@ function ComplaintCategories() {
 
             {categories
                 .map((newItem, i) => (
-                    <div key={i} className="relative w-full aspect-[2] bg-background rounded-3xl flex items-end overflow-hidden cursor-pointer" onClick={() => {
-                        // setEditOpen(true);
-                        // setEditingNew(newItem);
+                    <div key={i} className="relative w-full aspect-[2] bg-white rounded-3xl cursor-pointer p-6" onClick={() => {
+                        setOpenEditModal(true);
+                        setEditingCategory(newItem);
                     }}>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-
-                        <div className="text-white px-4 py-4 font-semibold text-lg line-clamp-2 z-10">
+                        <div className="text-dark font-semibold text-lg">
                             {newItem.title}
+                        </div>
+
+                        <div className="text-secondary text-sm mt-1">
+                            {newItem.content}
                         </div>
                     </div>
                 ))}

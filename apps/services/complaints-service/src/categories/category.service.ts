@@ -62,7 +62,6 @@ export class CategoryService {
 
         const category = await this.categoryRepo.findOne({
             where: { id },
-            relations: ["role"],
         });
 
         if (!category) {

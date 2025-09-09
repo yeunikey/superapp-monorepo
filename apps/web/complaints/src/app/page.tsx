@@ -1,9 +1,9 @@
 "use client";
 
-import View from "@/shared/ui/View";
 import { useAuth } from "@/entities/data/model/useAuth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "@/shared/ui/Loader";
+import CategoriesList from "@/widgets/home/CategoriesList";
 
 type Complaint = {
   id: number;
@@ -39,6 +39,7 @@ export default function Home() {
 
   return (
     <div className="py-6 space-y-6">
+
       <div>
         <div className="text-2xl font-semibold mb-3 mx-6">Мои обращения</div>
 
@@ -80,7 +81,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex justify-center my-4">
+          {/* <div className="flex justify-center my-4">
             <div className="w-[95%] bg-background h-0.5" />
           </div>
 
@@ -97,54 +98,23 @@ export default function Home() {
                 Личные проблемы
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
+        <div className="flex justify-center py-4 items-center gap-3">
+          <div className="text-secondary">
+            Посмотреть все
+          </div>
+
+          <svg xmlns="http://www.w3.org/2000/svg" className="fill-secondary" height="28px" viewBox="0 -960 960 960"><path d="M655-200 513-342l56-56 85 85 170-170 56 57-225 226Zm0-320L513-662l56-56 85 85 170-170 56 57-225 226ZM80-280v-80h360v80H80Zm0-320v-80h360v80H80Z" /></svg></div>
 
       </div>
 
       <div>
-        <div className="flex gap-3 mb-4 mx-6">
-          <button
-            onClick={() => setActiveTab("complaint")}
-            className={`px-4 py-2 rounded-4xl text font-medium ${activeTab === "complaint" ? "bg-primary text-white" : "bg-white text-dark"
-              }`}
-          >
-            Жалобы
-          </button>
-          <button
-            onClick={() => setActiveTab("suggestion")}
-            className={`px-4 py-2 rounded-4xl text font-medium ${activeTab === "suggestion" ? "bg-primary text-white" : "bg-white text-dark"
-              }`}
-          >
-            Предложения
-          </button>
-        </div>
+        <div className="text-2xl font-semibold mb-3 mx-6">Выберите категорию</div>
 
-        <div className="grid gap-3">
-          <div
-            className="p-4 rounded-4xl bg-white px-6 py-4"
-          >
-            <div className="font-semibold text-lg">Академические вопросы</div>
-            <div className="text-sm text-gray-600 mt-1">Проблемы с преподавателями, задержки или ошибки в оценках, вопросы по учебным материалам или расписанию.</div>
-          </div>
 
-          <div
-            className="p-4 rounded-4xl bg-white px-6 py-4"
-          >
-            <div className="font-semibold text-lg">Инфраструктура</div>
-            <div className="text-sm text-gray-600 mt-1">
-              Жалобы на состояние корпусов, аудитории и общежития, проблемы с оборудованием, интернетом или благоустройством территории.
-            </div>
-          </div>
-
-          <div
-            className="p-4 rounded-4xl bg-white px-6 py-4"
-          >
-            <div className="font-semibold text-lg">Академические вопросы</div>
-            <div className="text-sm text-gray-600 mt-1">Проблемы с преподавателями, задержки или ошибки в оценках, вопросы по учебным материалам или расписанию.</div>
-          </div>
-        </div>
+        <CategoriesList />
       </div>
     </div >
   );
