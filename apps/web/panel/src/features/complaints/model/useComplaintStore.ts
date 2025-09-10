@@ -1,4 +1,5 @@
 import { ComplaintCategory } from '@/entities/complaints/types/category';
+import { Complaint } from '@/entities/complaints/types/complaint';
 import { create } from 'zustand';
 
 type ComplaintState = {
@@ -11,8 +12,14 @@ type ComplaintState = {
     openEditModal: boolean;
     setOpenEditModal: (open: boolean) => void;
 
+    openViewModal: boolean;
+    setOpenViewModal: (open: boolean) => void;
+
     editingCategory: ComplaintCategory | null;
     setEditingCategory: (category: ComplaintCategory | null) => void;
+
+    viewingComplaint: Complaint | null;
+    setViewingComplaint: (viewingComplaint: Complaint | null) => void;
 };
 
 export const useComplaintStore = create<ComplaintState>((set) => ({
@@ -25,6 +32,12 @@ export const useComplaintStore = create<ComplaintState>((set) => ({
     openEditModal: false,
     setOpenEditModal: (open) => set({ openEditModal: open }),
 
+    openViewModal: false,
+    setOpenViewModal: (open) => set({ openViewModal: open }),
+
     editingCategory: null,
     setEditingCategory: (category) => set({ editingCategory: category }),
+
+    viewingComplaint: null,
+    setViewingComplaint: (viewingComplaint: Complaint | null) => set({ viewingComplaint })
 }));

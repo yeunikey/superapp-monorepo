@@ -5,6 +5,7 @@ import {
     Get,
     HttpStatus,
     Param,
+    Patch,
     Post,
     Req,
     UseGuards,
@@ -58,6 +59,39 @@ export class ComplaintController {
         return {
             statusCode: HttpStatus.OK,
             data: complaints,
+        };
+    }
+
+    @Patch("/:id/status")
+    @UseGuards(AuthGuard)
+    async updateStatus(
+        @Param("id") id: string,
+        @Body() body: { status: Complaint["status"] },
+        @Req() { user: { barcode } }: AuthRequest,
+    ) {
+        const { data: currentUser } = await this.userClient.getUserByBarcode(barcode);
+
+        if (!currentUser || !currentUser.role || !["admin", "dev"].includes(currentUser.role.key)) {
+            return {
+                statusCode: HttpStatus.FORBIDDEN,
+                message: "Нет прав для изменения статуса",
+            };
+        }
+
+        const complaint = await this.complaintService.find(id);
+        if (!complaint) {
+            return {
+                statusCode: HttpStatus.NOT_FOUND,
+                message: "Обращение не найдено",
+            };
+        }
+
+        complaint.status = body.status;
+        const saved = await this.complaintService.save(complaint);
+
+        return {
+            statusCode: HttpStatus.OK,
+            data: saved,
         };
     }
 

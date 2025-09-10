@@ -25,7 +25,7 @@ const fetchComplaints = async () => {
     const { setComplaints } = useComplaints.getState();
     const { token } = useAuth.getState();
 
-    await api.get<ApiResponse<Complaint[]>>('complaints', {
+    await api.get<ApiResponse<Complaint[]>>('complaints/my', {
         headers: {
             Authorization: `Bearer ${token}`,
         }

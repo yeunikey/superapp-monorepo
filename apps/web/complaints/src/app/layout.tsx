@@ -1,6 +1,6 @@
+
 import "./globals.css";
 
-import Authorize from "@/features/auth/ui/Authorize";
 import { Golos_Text } from "next/font/google";
 import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
@@ -21,10 +21,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en">
       <body
-        className={`${golos.variable} antialiased bg-background h-dvh`}
+        className={`${golos.variable} antialiased bg-background h-dvh relative`}
       >
 
         <ToastContainer closeButton hideProgressBar position="bottom-right" stacked autoClose={3000} />

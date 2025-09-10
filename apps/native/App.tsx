@@ -119,6 +119,7 @@ export default function App() {
             name="ComplaintsService"
             component={ComplaintsService}
             options={({ route }) => ({
+              gestureEnabled: false,
               animation: route.params.animation
             })}
           />

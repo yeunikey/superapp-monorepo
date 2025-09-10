@@ -42,6 +42,7 @@ function ComplaintsService() {
                 cacheEnabled
                 cacheMode="LOAD_CACHE_ELSE_NETWORK"
                 javaScriptEnabled
+                allowsBackForwardNavigationGestures={true}
             />
 
             {!loaded && (

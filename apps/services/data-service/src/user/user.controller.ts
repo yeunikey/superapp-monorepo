@@ -62,7 +62,10 @@ export class UserController {
                 message: "Такого юзера не существует"
             }
         }
-        return user;
+        return {
+            statusCode: HttpStatus.OK,
+            data: user
+        };
     }
 
     @Post()

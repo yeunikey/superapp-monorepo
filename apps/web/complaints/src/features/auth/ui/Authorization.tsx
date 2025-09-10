@@ -52,7 +52,9 @@ function Authorization({ children }: AuthorizationProps) {
         };
     }, []);
 
-    return (<>{children}</>);
+    return (
+        <>{children}</>
+    );
 }
 
 export default Authorization;

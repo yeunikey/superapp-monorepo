@@ -6,7 +6,10 @@ dotenv.config({ path: resolve(__dirname, './../../../.env') });
 
 
 const nextConfig: NextConfig = {
-    devIndicators: false
+    devIndicators: false,
+    images: {
+        domains: ['localhost'], // 👈 добавили api.sedmarket.kz
+    },
 };
 
 export default nextConfig;
