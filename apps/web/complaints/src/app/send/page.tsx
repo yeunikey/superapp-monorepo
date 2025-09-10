@@ -50,9 +50,10 @@ function SendPage() {
         setContent("");
         setImages([]);
 
-        setSelectedCategory(null);
 
         router.back();
+
+        setSelectedCategory(null);
     };
 
     const handleSubmit = async () => {

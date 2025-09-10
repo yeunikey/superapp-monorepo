@@ -226,9 +226,9 @@ function ViewComplaintModal() {
                 </div>
 
                 {loggedUser && (
-                    <div className="flex gap-3 items-center justify-end">
+                    <div className="flex gap-6 items-center justify-end">
                         <select
-                            className="border rounded-lg px-3 py-2"
+                            className="px-3 py-2 rounded-4xl bg-background focus:outline-primary"
                             defaultValue={viewingComplaint.status}
                             onChange={(e) =>
                                 updateStatus(e.target.value as Complaint["status"])
@@ -241,7 +241,7 @@ function ViewComplaintModal() {
                         </select>
 
                         <button
-                            className="bg-red-600 text-white px-4 py-2 h-fit rounded-lg hover:bg-red-700 transition disabled:opacity-50"
+                            className="text-red border-2 border-red px-6 py-2 h-fit rounded-4xl transition disabled:opacity-50"
                             onClick={deleteComplaint}
                             disabled={loading}
                         >
